@@ -556,7 +556,7 @@ that points the `--yotei-*` variables at your theme tokens (`--primary`,
 `--popover`, `--border`, `--radius`…), and installs the package:
 
 ```sh
-npx shadcn@latest add https://<github>/r/schedule-picker.json
+npx shadcn@latest add https://raw.githubusercontent.com/whoselen/yotei/main/playground/public/r/schedule-picker.json
 ```
 
 ```tsx
@@ -878,6 +878,7 @@ npm run dev               # playground: every layout and option
 npm run typecheck
 npm run build             # dist/: ESM, one file per module, types, styles.css
 npm run check:package     # build, then publint and arethetypeswrong on the packed tarball
+npm run registry:build    # playground/public/r/schedule-picker.json, the file the shadcn command installs: commit it
 npm run build:playground  # the docs site, with the shadcn registry at /r/schedule-picker.json
 ```
 

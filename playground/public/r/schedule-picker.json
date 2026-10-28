@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "schedule-picker",
+  "title": "Schedule Picker",
+  "description": "A future-only date & time picker with inline, popover and preset layouts, themed with your shadcn/ui tokens.",
+  "dependencies": [
+    "react-schedule-time-picker"
+  ],
+  "files": [
+    {
+      "path": "registry/schedule-picker.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport {\n  SchedulePicker as BaseSchedulePicker,\n  type SchedulePickerProps,\n  type ScheduleValueType,\n} from \"react-schedule-time-picker\";\nimport \"react-schedule-time-picker/styles.css\";\n\nimport { cn } from \"@/lib/utils\";\n\n// The picker's colors and radius, pointed at your theme tokens. The field matches\n// <Input>: the page background in light mode, a tint of --input in dark.\nconst themeTokens = cn(\n  \"[--yotei-foreground:var(--foreground)]\",\n  \"[--yotei-surface:var(--popover)]\",\n  \"[--yotei-field:var(--background)] dark:[--yotei-field:color-mix(in_oklab,var(--input)_30%,transparent)]\",\n  \"[--yotei-primary:var(--primary)]\",\n  \"[--yotei-primary-foreground:var(--primary-foreground)]\",\n  \"[--yotei-muted:var(--muted)]\",\n  \"[--yotei-muted-foreground:var(--muted-foreground)]\",\n  \"[--yotei-accent:var(--accent)]\",\n  \"[--yotei-accent-foreground:var(--accent-foreground)]\",\n  \"[--yotei-border:var(--border)]\",\n  \"[--yotei-input:var(--input)]\",\n  \"[--yotei-ring:var(--ring)]\",\n  \"[--yotei-radius:var(--radius)]\",\n);\n\n// generic, so `valueType` keeps typing `value` and `onChange` through the wrapper\nfunction SchedulePicker<T extends ScheduleValueType = \"parts\">({\n  className,\n  ...props\n}: SchedulePickerProps<T> & React.RefAttributes<HTMLButtonElement>) {\n  return <BaseSchedulePicker<T> className={cn(themeTokens, className)} {...props} />;\n}\n\nexport { SchedulePicker };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
