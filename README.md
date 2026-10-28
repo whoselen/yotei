@@ -54,7 +54,7 @@ is why its CSS classes and variables start with `yotei-`._
 
 ## Contents
 
-- [Install](#install)
+- [Install: npm or the shadcn/ui CLI](#install)
 - [Quick start](#quick-start)
 - [Layouts](#layouts)
 - [The value](#the-value)
@@ -76,13 +76,55 @@ is why its CSS classes and variables start with `yotei-`._
 
 ## Install
 
+There are two ways in. Both give you the same component with the same props;
+they differ in where the colors come from.
+
+### From npm
+
 ```sh
 npm install react-schedule-time-picker
 # or: pnpm add, yarn add, bun add react-schedule-time-picker
 ```
 
-React 18 or 19. The package is ESM only and has no runtime dependencies. Using
-shadcn/ui? See [shadcn/ui](#shadcnui) for a wrapper that follows your theme.
+Import the stylesheet once and the components from the package, as in the
+[Quick start](#quick-start). The picker has its own light and dark palette,
+which you can change with [CSS variables](#css-variables).
+
+### With the shadcn/ui CLI
+
+In a project set up with shadcn/ui (one with a `components.json`):
+
+```sh
+npx shadcn@latest add https://raw.githubusercontent.com/whoselen/yotei/main/playground/public/r/schedule-picker.json
+```
+
+This installs the package and adds `components/ui/schedule-picker.tsx`, a short
+wrapper that imports the stylesheet and points the picker's colors and radius
+at your theme. Import the picker from there:
+
+```tsx
+import { SchedulePicker } from "@/components/ui/schedule-picker";
+
+<SchedulePicker variant="popover" valueType="iso" onChange={(when) => save(when)} />;
+```
+
+The wrapper only provides `SchedulePicker`. Everything else in this README
+(types, value helpers, `SchedulePickerProvider`, `useSchedulePicker`) is still
+imported from `react-schedule-time-picker`, which the CLI installed. See
+[shadcn/ui](#shadcnui) for what the wrapper does.
+
+### Which one?
+
+|                              | npm                                     | shadcn/ui CLI                                         |
+| ---------------------------- | --------------------------------------- | ----------------------------------------------------- |
+| Adds                         | the package                             | the package, plus `components/ui/schedule-picker.tsx` |
+| Stylesheet                   | you import it once                      | the wrapper imports it                                |
+| Colors                       | the picker's own light and dark palette | your shadcn/ui theme, light and dark                  |
+| Import `SchedulePicker` from | `react-schedule-time-picker`            | `@/components/ui/schedule-picker`                     |
+| Updates                      | `npm update`                            | `npm update`; the wrapper is your file                |
+
+Either way you need React 18 or 19. The package is ESM only and has no runtime
+dependencies.
 
 ## Quick start
 
@@ -111,6 +153,9 @@ The user picks a day, then an hour, then a minute. The panel closes once the
 minute is picked, and `onChange` gets the value, or `null` when it's cleared.
 Leave out `value` to let the picker hold it (`defaultValue` sets the first
 one).
+
+Installed with the shadcn/ui CLI? Leave out the stylesheet import and import
+`SchedulePicker` from `@/components/ui/schedule-picker`. The rest is the same.
 
 ## Layouts
 
@@ -551,23 +596,15 @@ or `"system"` on one picker.
 
 ### shadcn/ui
 
-The registry item adds `components/ui/schedule-picker.tsx`, a short wrapper
-that points the `--yotei-*` variables at your theme tokens (`--primary`,
-`--popover`, `--border`, `--radius`…), and installs the package:
+[The shadcn/ui CLI](#with-the-shadcnui-cli) adds
+`components/ui/schedule-picker.tsx`, a short wrapper that imports the
+stylesheet and points the `--yotei-*` variables at your theme tokens
+(`--primary`, `--popover`, `--border`, `--radius`…). It follows your theme and
+its `.dark` class.
 
-```sh
-npx shadcn@latest add https://raw.githubusercontent.com/whoselen/yotei/main/playground/public/r/schedule-picker.json
-```
-
-```tsx
-import { SchedulePicker } from "@/components/ui/schedule-picker";
-
-<SchedulePicker variant="popover" value={value} onChange={setValue} />;
-```
-
-The file is yours to edit like any shadcn component. It follows your theme
-and its `.dark` class. If you write your own wrapper instead, make it generic
-over the value type, as this one is, so `valueType` keeps typing `onChange`.
+The file is yours to edit like any shadcn component: change a mapping, or set
+your own defaults. If you write your own wrapper instead, make it generic over
+the value type, as this one is, so `valueType` keeps typing `onChange`.
 
 ### Fully custom
 
