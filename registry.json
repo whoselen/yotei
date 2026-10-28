@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "react-schedule-time-picker",
+  "homepage": "https://www.npmjs.com/package/react-schedule-time-picker",
+  "items": [
+    {
+      "name": "schedule-picker",
+      "type": "registry:ui",
+      "title": "Schedule Picker",
+      "description": "A future-only date & time picker with inline, popover and preset layouts, themed with your shadcn/ui tokens.",
+      "dependencies": ["react-schedule-time-picker"],
+      "files": [
+        {
+          "path": "registry/schedule-picker.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    }
+  ]
+}

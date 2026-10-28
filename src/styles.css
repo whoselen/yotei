@@ -1,0 +1,673 @@
+/*
+ * react-schedule-time-picker -- default styles
+ *
+ * Built to be overridden:
+ * - Every rule is in `@layer components` behind zero-specificity :where(), so
+ *   any selector of yours, or a Tailwind utility passed through `classNames`,
+ *   wins without !important.
+ * - Colors, radius and sizes are --yotei-* variables. Set them on :root, any
+ *   ancestor, `.yotei-root`, or one picker's `style`. Dark mode kicks in inside
+ *   `.dark` / `[data-theme="dark"]`, or per picker with the `theme` prop.
+ * - Parts carry their state as data attributes: [data-selected],
+ *   [data-disabled], [data-today], [data-filled], [data-state="open"],
+ *   [data-side="top"], [data-variant="popover"] ...
+ */
+
+/* Tailwind v4's layer order, declared up front so this file can be imported before or after Tailwind */
+@layer theme, base, components, utilities;
+
+@layer components {
+  /* ── Tokens ──────────────────────────────────────────────────────
+     Set --yotei-primary etc. to change both modes, or --yotei-light-primary /
+     --yotei-dark-primary to change one. (Plain palettes rather than
+     light-dark(): bundlers lower that function in a way that breaks
+     custom properties inherited from :root.) */
+
+  :where(:root, :host) {
+    --yotei-radius: 0.625rem;
+    --yotei-list-height: 180px;
+    --yotei-popover-width: 20rem;
+
+    --yotei-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --yotei-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --yotei-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+    --yotei-light-foreground: oklch(0.145 0 0);
+    --yotei-light-surface: oklch(1 0 0);
+    --yotei-light-field: oklch(1 0 0);
+    --yotei-light-primary: oklch(0.205 0 0);
+    --yotei-light-primary-foreground: oklch(0.985 0 0);
+    --yotei-light-muted: oklch(0.97 0 0);
+    --yotei-light-muted-foreground: oklch(0.556 0 0);
+    --yotei-light-accent: oklch(0.97 0 0);
+    --yotei-light-accent-foreground: oklch(0.205 0 0);
+    --yotei-light-border: oklch(0.922 0 0);
+    --yotei-light-input: oklch(0.922 0 0);
+    --yotei-light-ring: oklch(0.708 0 0);
+
+    --yotei-dark-foreground: oklch(0.985 0 0);
+    --yotei-dark-surface: oklch(0.205 0 0);
+    --yotei-dark-field: oklch(1 0 0 / 4.5%);
+    --yotei-dark-primary: oklch(0.922 0 0);
+    --yotei-dark-primary-foreground: oklch(0.205 0 0);
+    --yotei-dark-muted: oklch(0.269 0 0);
+    --yotei-dark-muted-foreground: oklch(0.708 0 0);
+    --yotei-dark-accent: oklch(0.269 0 0);
+    --yotei-dark-accent-foreground: oklch(0.985 0 0);
+    --yotei-dark-border: oklch(1 0 0 / 10%);
+    --yotei-dark-input: oklch(1 0 0 / 15%);
+    --yotei-dark-ring: oklch(0.556 0 0);
+  }
+
+  /* ── Mode: light by default, dark inside .dark / [data-theme="dark"],
+     or whatever the `theme` prop forces on one picker ────────────── */
+
+  :where(:root, :host, .light, [data-theme="light"]) {
+    --yotei-color-scheme: light;
+    --yotei-foreground: var(--yotei-light-foreground);
+    --yotei-surface: var(--yotei-light-surface);
+    --yotei-field: var(--yotei-light-field);
+    --yotei-primary: var(--yotei-light-primary);
+    --yotei-primary-foreground: var(--yotei-light-primary-foreground);
+    --yotei-muted: var(--yotei-light-muted);
+    --yotei-muted-foreground: var(--yotei-light-muted-foreground);
+    --yotei-accent: var(--yotei-light-accent);
+    --yotei-accent-foreground: var(--yotei-light-accent-foreground);
+    --yotei-border: var(--yotei-light-border);
+    --yotei-input: var(--yotei-light-input);
+    --yotei-ring: var(--yotei-light-ring);
+  }
+  :where(.dark, [data-theme="dark"]) {
+    --yotei-color-scheme: dark;
+    --yotei-foreground: var(--yotei-dark-foreground);
+    --yotei-surface: var(--yotei-dark-surface);
+    --yotei-field: var(--yotei-dark-field);
+    --yotei-primary: var(--yotei-dark-primary);
+    --yotei-primary-foreground: var(--yotei-dark-primary-foreground);
+    --yotei-muted: var(--yotei-dark-muted);
+    --yotei-muted-foreground: var(--yotei-dark-muted-foreground);
+    --yotei-accent: var(--yotei-dark-accent);
+    --yotei-accent-foreground: var(--yotei-dark-accent-foreground);
+    --yotei-border: var(--yotei-dark-border);
+    --yotei-input: var(--yotei-dark-input);
+    --yotei-ring: var(--yotei-dark-ring);
+  }
+  @media (prefers-color-scheme: light) {
+    :where(.yotei-root[data-theme="system"]) {
+      --yotei-color-scheme: light;
+      --yotei-foreground: var(--yotei-light-foreground);
+      --yotei-surface: var(--yotei-light-surface);
+      --yotei-field: var(--yotei-light-field);
+      --yotei-primary: var(--yotei-light-primary);
+      --yotei-primary-foreground: var(--yotei-light-primary-foreground);
+      --yotei-muted: var(--yotei-light-muted);
+      --yotei-muted-foreground: var(--yotei-light-muted-foreground);
+      --yotei-accent: var(--yotei-light-accent);
+      --yotei-accent-foreground: var(--yotei-light-accent-foreground);
+      --yotei-border: var(--yotei-light-border);
+      --yotei-input: var(--yotei-light-input);
+      --yotei-ring: var(--yotei-light-ring);
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    :where(.yotei-root[data-theme="system"]) {
+      --yotei-color-scheme: dark;
+      --yotei-foreground: var(--yotei-dark-foreground);
+      --yotei-surface: var(--yotei-dark-surface);
+      --yotei-field: var(--yotei-dark-field);
+      --yotei-primary: var(--yotei-dark-primary);
+      --yotei-primary-foreground: var(--yotei-dark-primary-foreground);
+      --yotei-muted: var(--yotei-dark-muted);
+      --yotei-muted-foreground: var(--yotei-dark-muted-foreground);
+      --yotei-accent: var(--yotei-dark-accent);
+      --yotei-accent-foreground: var(--yotei-dark-accent-foreground);
+      --yotei-border: var(--yotei-dark-border);
+      --yotei-input: var(--yotei-dark-input);
+      --yotei-ring: var(--yotei-dark-ring);
+    }
+  }
+
+  /* ── Base ──────────────────────────────────────────────────────── */
+
+  :where(.yotei-root) {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    color: var(--yotei-foreground);
+    /* scrollbars follow the picker's mode, without touching the page's */
+    color-scheme: var(--yotei-color-scheme);
+  }
+  :where(.yotei-root, .yotei-root *, .yotei-root ::before, .yotei-root ::after) {
+    box-sizing: border-box;
+  }
+  /* only the picker's own buttons: custom components keep your page's styles */
+  :where(.yotei-trigger, .yotei-clear, .yotei-nav-button, .yotei-back, .yotei-day, .yotei-option, .yotei-preset) {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  :where(.yotei-trigger:disabled, .yotei-clear:disabled, .yotei-day:disabled, .yotei-option:disabled) {
+    cursor: not-allowed;
+  }
+  /* icons -- yours included -- are sized by the slot they sit in */
+  :where(
+      .yotei-trigger-icon,
+      .yotei-trigger-indicator,
+      .yotei-clear,
+      .yotei-nav-button,
+      .yotei-back,
+      .yotei-option-check,
+      .yotei-preset-icon,
+      .yotei-preset-check,
+      .yotei-preset-arrow
+    )
+    :where(svg) {
+    display: block;
+    flex-shrink: 0;
+    width: var(--yotei-icon-size, 1rem);
+    height: var(--yotei-icon-size, 1rem);
+  }
+
+  /* ── Trigger ───────────────────────────────────────────────────── */
+
+  :where(.yotei-trigger-row) {
+    display: flex;
+    gap: 0.5rem;
+  }
+  :where(.yotei-trigger, .yotei-clear) {
+    display: inline-flex;
+    align-items: center;
+    height: 2.25rem;
+    border: 1px solid var(--yotei-input);
+    border-radius: calc(var(--yotei-radius) - 2px);
+    background: var(--yotei-field);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    box-shadow: var(--yotei-shadow-xs);
+    transition-property: color, background-color, border-color, box-shadow;
+    transition-duration: 150ms;
+  }
+  :where(.yotei-trigger) {
+    flex: 1;
+    min-width: 0;
+    gap: 0.5rem;
+    padding: 0 0.75rem;
+    white-space: nowrap;
+  }
+  :where(.yotei-trigger:not([data-filled])) {
+    color: var(--yotei-muted-foreground);
+  }
+  :where(.yotei-trigger:hover, .yotei-clear:hover) {
+    background: var(--yotei-accent);
+    color: var(--yotei-accent-foreground);
+  }
+  :where(.yotei-trigger:disabled) {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  :where(.yotei-trigger-icon, .yotei-trigger-indicator) {
+    display: inline-flex;
+  }
+  /* by state, not class, so the default content works inside a custom trigger too */
+  :where([data-filled] .yotei-trigger-icon) {
+    color: var(--yotei-primary);
+  }
+  :where(.yotei-trigger-label) {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+  :where(.yotei-trigger-indicator) {
+    --yotei-icon-size: 0.875rem;
+    color: var(--yotei-muted-foreground);
+    transition: rotate 200ms;
+  }
+  :where(.yotei-trigger-indicator[data-icon="check"]) {
+    color: var(--yotei-primary);
+  }
+  :where([data-state="open"] .yotei-trigger-indicator[data-icon="chevron"]) {
+    rotate: 180deg;
+  }
+  :where(.yotei-clear) {
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.25rem;
+    color: var(--yotei-muted-foreground);
+  }
+
+  /* ── Panel: inline (collapse) and floating (popover) ───────────── */
+
+  :where(.yotei-panel) {
+    overflow: hidden;
+    border: 1px solid var(--yotei-border);
+    border-radius: var(--yotei-radius);
+    background: var(--yotei-surface);
+    color: var(--yotei-foreground);
+    box-shadow: var(--yotei-shadow-sm);
+  }
+
+  :where(.yotei-collapse) {
+    display: grid;
+    grid-template-rows: 0fr;
+    margin-top: 0;
+    opacity: 0;
+    transition-property: grid-template-rows, opacity, margin-top;
+    transition-duration: 200ms;
+    transition-timing-function: ease-out;
+  }
+  :where(.yotei-collapse > *) {
+    min-height: 0;
+    overflow: hidden;
+  }
+  :where(.yotei-collapse[data-state="open"]) {
+    grid-template-rows: 1fr;
+    margin-top: 0.5rem;
+    opacity: 1;
+  }
+  @starting-style {
+    :where(.yotei-collapse[data-state="open"]) {
+      grid-template-rows: 0fr;
+      margin-top: 0;
+      opacity: 0;
+    }
+  }
+
+  :where(.yotei-popover) {
+    position: absolute;
+    z-index: 50;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    min-width: var(--yotei-popover-width);
+    max-width: calc(100vw - 2rem);
+    margin-top: 0.5rem;
+    transform-origin: top;
+    transition-property: opacity, scale, translate;
+    transition-duration: 150ms;
+    transition-timing-function: ease-out;
+  }
+  :where(.yotei-popover[data-side="top"]) {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    transform-origin: bottom;
+  }
+  :where(.yotei-popover[data-align="end"]) {
+    left: auto;
+    right: 0;
+  }
+  :where(.yotei-popover > .yotei-panel) {
+    box-shadow: var(--yotei-shadow-lg);
+  }
+  :where(.yotei-popover[data-state="closed"]) {
+    opacity: 0;
+    scale: 0.97;
+    translate: 0 -0.25rem;
+    pointer-events: none;
+  }
+  :where(.yotei-popover[data-state="closed"][data-side="top"]) {
+    translate: 0 0.25rem;
+  }
+  @starting-style {
+    :where(.yotei-popover[data-state="open"]) {
+      opacity: 0;
+      scale: 0.97;
+      translate: 0 -0.25rem;
+    }
+    :where(.yotei-popover[data-state="open"][data-side="top"]) {
+      translate: 0 0.25rem;
+    }
+  }
+
+  /* ── Day strip ─────────────────────────────────────────────────── */
+
+  :where(.yotei-days) {
+    padding: 0.75rem 0.75rem 0.5rem;
+    border-bottom: 1px solid var(--yotei-border);
+  }
+  :where(.yotei-days-header) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.375rem;
+  }
+  :where(.yotei-month, .yotei-column-label) {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--yotei-muted-foreground);
+  }
+  :where(.yotei-month) {
+    font-size: 11px;
+    line-height: 1rem;
+  }
+  :where(.yotei-nav) {
+    display: flex;
+    gap: 0.125rem;
+  }
+  :where(.yotei-nav-button) {
+    --yotei-icon-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: calc(var(--yotei-radius) - 2px);
+    color: var(--yotei-muted-foreground);
+    transition-property: color, background-color;
+    transition-duration: 150ms;
+  }
+  :where(.yotei-nav-button:hover) {
+    background: var(--yotei-muted);
+    color: var(--yotei-foreground);
+  }
+  /* width 0 + min-width 100%: fill the panel without reporting all the days
+     as intrinsic width, which would stretch grid / flex parents on mobile */
+  :where(.yotei-day-list) {
+    position: relative;
+    display: flex;
+    gap: 0.375rem;
+    width: 0;
+    min-width: 100%;
+    padding: 0.125rem 0 0.25rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  :where(.yotei-day) {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 3rem;
+    padding: 0.375rem 0;
+    border-radius: var(--yotei-radius);
+    text-align: center;
+    transition-property: color, background-color;
+    transition-duration: 150ms;
+  }
+  :where(.yotei-day:hover) {
+    background: var(--yotei-muted);
+  }
+  :where(.yotei-day-label, .yotei-day-weekday) {
+    font-size: 9px;
+    line-height: 1.25;
+    color: var(--yotei-muted-foreground);
+  }
+  :where(.yotei-day-label) {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  :where(.yotei-day-weekday) {
+    font-weight: 500;
+  }
+  :where(.yotei-day-number) {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.375;
+  }
+  :where(.yotei-today-dot) {
+    position: absolute;
+    top: -0.125rem;
+    left: 50%;
+    width: 0.25rem;
+    height: 0.25rem;
+    translate: -50% 0;
+    border-radius: 9999px;
+    background: var(--yotei-primary);
+  }
+  :where(.yotei-day[data-disabled]) {
+    background: none;
+    color: color-mix(in oklab, var(--yotei-muted-foreground) 40%, transparent);
+  }
+  :where(.yotei-day[data-selected]) {
+    background: var(--yotei-primary);
+    color: var(--yotei-primary-foreground);
+    box-shadow: var(--yotei-shadow-sm);
+  }
+  :where(.yotei-day[data-selected] .yotei-day-label) {
+    color: color-mix(in oklab, var(--yotei-primary-foreground) 80%, transparent);
+  }
+  :where(.yotei-day[data-selected] .yotei-day-weekday) {
+    color: color-mix(in oklab, var(--yotei-primary-foreground) 70%, transparent);
+  }
+  :where(.yotei-day[data-selected] .yotei-today-dot) {
+    background: var(--yotei-primary-foreground);
+  }
+  /* the 1st names its month, so a "1" after "31" reads right */
+  :where(.yotei-day[data-month-start]:not([data-selected], [data-disabled]) .yotei-day-label) {
+    color: var(--yotei-foreground);
+  }
+
+  /* dayRows > 1: every day at once, the rows sharing the panel's width */
+  :where(.yotei-day-list[data-layout="grid"]) {
+    display: grid;
+    grid-template-columns: repeat(var(--yotei-day-columns, 7), minmax(0, 1fr));
+    gap: 0.25rem;
+  }
+  :where(.yotei-day-list[data-layout="grid"] .yotei-day) {
+    container-type: inline-size;
+    width: auto;
+    padding: 0.3125rem 0;
+  }
+  /* many days to a row: cells too narrow for "TODAY" keep just the number
+     (today keeps its dot, and every day its full date for screen readers) */
+  @container (width < 2.25rem) {
+    :where(.yotei-day-list[data-layout="grid"] .yotei-day-label) {
+      display: none;
+    }
+  }
+  /* two lines per day: the label already says the weekday (or today, the month) */
+  :where(.yotei-day-list[data-layout="grid"] .yotei-day-weekday) {
+    display: none;
+  }
+  :where(.yotei-day-list[data-layout="grid"] .yotei-day-label) {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ── Hour | minute columns ─────────────────────────────────────── */
+
+  :where(.yotei-time) {
+    display: flex;
+  }
+  :where(.yotei-column) {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+  :where(.yotei-column + .yotei-column) {
+    border-left: 1px solid var(--yotei-border);
+  }
+  :where(.yotei-column-label) {
+    padding: 0.5rem 0.75rem 0.25rem;
+    font-size: 10px;
+    line-height: 1rem;
+  }
+  :where(.yotei-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    height: var(--yotei-list-height);
+    padding: 0 0.5rem 0.5rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  :where(.yotei-option) {
+    --yotei-icon-size: 0.75rem;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.375rem 0.75rem;
+    border-radius: calc(var(--yotei-radius) - 2px);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    transition-property: color, background-color;
+    transition-duration: 100ms;
+  }
+  :where(.yotei-option:hover) {
+    background: var(--yotei-accent);
+    color: var(--yotei-accent-foreground);
+  }
+  :where(.yotei-option-period) {
+    margin-left: 0.25rem;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--yotei-muted-foreground);
+  }
+  :where(.yotei-option-period[data-position="start"]) {
+    margin-left: 0;
+    margin-right: 0.25rem;
+  }
+  :where(.yotei-option[data-selected]) {
+    background: var(--yotei-primary);
+    color: var(--yotei-primary-foreground);
+    box-shadow: var(--yotei-shadow-sm);
+  }
+  :where(.yotei-option[data-selected] .yotei-option-period) {
+    color: color-mix(in oklab, var(--yotei-primary-foreground) 70%, transparent);
+  }
+  :where(.yotei-option[data-disabled]) {
+    background: none;
+    color: color-mix(in oklab, var(--yotei-muted-foreground) 25%, transparent);
+    text-decoration: line-through;
+  }
+  :where(.yotei-option[data-disabled] .yotei-option-period) {
+    color: color-mix(in oklab, var(--yotei-muted-foreground) 20%, transparent);
+  }
+  :where(.yotei-empty) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 140px;
+    padding: 0 0.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: color-mix(in oklab, var(--yotei-muted-foreground) 60%, transparent);
+  }
+
+  /* ── Presets ───────────────────────────────────────────────────── */
+
+  :where(.yotei-presets) {
+    display: flex;
+    flex-direction: column;
+    padding: 0.375rem;
+  }
+  :where(.yotei-preset) {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: calc(var(--yotei-radius) - 2px);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    transition-property: color, background-color;
+    transition-duration: 100ms;
+  }
+  :where(.yotei-preset:hover) {
+    background: var(--yotei-accent);
+    color: var(--yotei-accent-foreground);
+  }
+  :where(.yotei-preset-label) {
+    flex: 1;
+    font-weight: 500;
+  }
+  :where(.yotei-preset-hint) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--yotei-muted-foreground);
+  }
+  :where(.yotei-preset[data-custom] .yotei-preset-hint) {
+    color: var(--yotei-primary);
+  }
+  :where(.yotei-preset-icon, .yotei-preset-check, .yotei-preset-arrow) {
+    display: inline-flex;
+  }
+  :where(.yotei-preset-icon, .yotei-preset-arrow) {
+    color: var(--yotei-muted-foreground);
+  }
+  :where(.yotei-preset-check, .yotei-preset-arrow) {
+    --yotei-icon-size: 0.875rem;
+  }
+  :where(.yotei-preset-check) {
+    color: var(--yotei-primary);
+  }
+  :where(.yotei-preset:not([data-selected]) .yotei-preset-check) {
+    visibility: hidden;
+  }
+  :where(.yotei-separator) {
+    height: 1px;
+    margin: 0.25rem 0.5rem;
+    background: var(--yotei-border);
+  }
+  :where(.yotei-panel-header) {
+    padding: 0.375rem;
+    border-bottom: 1px solid var(--yotei-border);
+  }
+  :where(.yotei-back) {
+    --yotei-icon-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    height: 1.75rem;
+    padding: 0 0.5rem;
+    border-radius: calc(var(--yotei-radius) - 2px);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--yotei-muted-foreground);
+    transition-property: color, background-color;
+    transition-duration: 150ms;
+  }
+  :where(.yotei-back:hover) {
+    background: var(--yotei-muted);
+    color: var(--yotei-foreground);
+  }
+
+  /* ── Focus + motion ────────────────────────────────────────────── */
+
+  :where(
+      .yotei-trigger:focus-visible,
+      .yotei-clear:focus-visible,
+      .yotei-nav-button:focus-visible,
+      .yotei-back:focus-visible,
+      .yotei-day:focus-visible,
+      .yotei-option:focus-visible,
+      .yotei-preset:focus-visible
+    ) {
+    outline: none;
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--yotei-ring) 60%, transparent);
+  }
+  :where(.yotei-trigger:focus-visible, .yotei-clear:focus-visible) {
+    border-color: var(--yotei-ring);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--yotei-ring) 50%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where(.yotei-root, .yotei-root *) {
+      transition: none;
+    }
+  }
+}

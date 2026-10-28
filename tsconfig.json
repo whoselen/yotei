@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "noUnusedLocals": true,
+    "types": ["vite/client", "node"],
+    // what the shadcn registry wrapper imports, as it resolves in an app
+    "paths": {
+      "react-schedule-time-picker": ["./src/index.ts"],
+      "@/lib/utils": ["./playground/shims/utils.ts"]
+    }
+  },
+  "include": ["src", "playground", "registry", "vite.config.ts", "tsdown.config.ts"]
+}

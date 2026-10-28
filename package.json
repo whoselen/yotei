@@ -1,0 +1,63 @@
+{
+  "name": "react-schedule-time-picker",
+  "version": "0.1.0",
+  "description": "A future-only date & time picker for React: inline, popover and preset layouts, styled with plain CSS you can override.",
+  "keywords": [
+    "react",
+    "date-picker",
+    "time-picker",
+    "datetime-picker",
+    "schedule",
+    "scheduling",
+    "shadcn",
+    "tailwind"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsdown",
+    "build:playground": "npm run registry:build && vite build",
+    "registry:build": "shadcn build --output playground/public/r",
+    "typecheck": "tsc --noEmit",
+    "check:package": "npm run build && publint && attw --pack . --profile esm-only --exclude-entrypoints styles.css",
+    "prepublishOnly": "npm run typecheck && npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "lucide-react": "^1.61.0",
+    "publint": "^0.3.25",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "shadcn": "^4.21.4",
+    "tailwindcss": "^4.3.3",
+    "tsdown": "^0.23.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5"
+  }
+}
