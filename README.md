@@ -7,6 +7,10 @@ bookings, deliveries, meetings.
 
 [![npm](https://img.shields.io/npm/v/react-schedule-time-picker)](https://www.npmjs.com/package/react-schedule-time-picker)
 [![license](https://img.shields.io/npm/l/react-schedule-time-picker)](https://www.npmjs.com/package/react-schedule-time-picker)
+[![GitHub stars](https://img.shields.io/github/stars/whoselen/yotei?logo=github)](https://github.com/whoselen/yotei)
+
+Source on GitHub: [whoselen/yotei](https://github.com/whoselen/yotei). If this
+saves you time, a ⭐ on GitHub helps.
 
 ```tsx
 import "react-schedule-time-picker/styles.css";
@@ -73,6 +77,7 @@ is why its CSS classes and variables start with `yotei-`._
 - [Headless: build your own layout](#headless-build-your-own-layout)
 - [API reference](#api-reference)
 - [Requirements](#requirements)
+- [Development](#development)
 
 ## Install
 
@@ -909,7 +914,12 @@ hover.
 
 ## Development
 
+The source lives at [github.com/whoselen/yotei](https://github.com/whoselen/yotei).
+Issues and pull requests are welcome.
+
 ```sh
+git clone https://github.com/whoselen/yotei.git
+cd yotei
 npm install
 npm run dev               # playground: every layout and option
 npm run typecheck
