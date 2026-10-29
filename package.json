@@ -1,6 +1,6 @@
 {
   "name": "react-schedule-time-picker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A future-only date & time picker for React: inline, popover and preset layouts, styled with plain CSS you can override.",
   "keywords": [
     "react",
