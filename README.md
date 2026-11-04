@@ -9,6 +9,9 @@ bookings, deliveries, meetings.
 [![license](https://img.shields.io/npm/l/react-schedule-time-picker)](https://www.npmjs.com/package/react-schedule-time-picker)
 [![GitHub stars](https://img.shields.io/github/stars/whoselen/yotei?logo=github)](https://github.com/whoselen/yotei)
 
+**[Live demo](https://yotei-kappa.vercel.app)**: try every layout and option in
+the browser.
+
 Source on GitHub: [whoselen/yotei](https://github.com/whoselen/yotei). If this
 saves you time, a ⭐ on GitHub helps.
 
@@ -934,3 +937,5 @@ npm run build:playground  # the docs site, with the shadcn registry at /r/schedu
 
 MIT. The built-in icons are adapted from [Lucide](https://lucide.dev) (ISC) and
 Feather (MIT); see `LICENSE`.
+
+Made by [@whoslen123](https://x.com/whoslen123).

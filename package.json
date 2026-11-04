@@ -64,7 +64,7 @@
     "type": "git",
     "url": "git+https://github.com/whoselen/yotei.git"
   },
-  "homepage": "https://github.com/whoselen/yotei#readme",
+  "homepage": "https://yotei-kappa.vercel.app",
   "bugs": {
     "url": "https://github.com/whoselen/yotei/issues"
   }
