@@ -3,7 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>react-schedule-time-picker playground</title>
+    <title>react-schedule-time-picker: a future-only date &amp; time picker for React</title>
+    <meta
+      name="description"
+      content="A date & time picker for React that only picks the future. Inline, popover and preset layouts, any time zone, plain CSS you can override, and a shadcn/ui wrapper."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="react-schedule-time-picker" />
+    <meta
+      property="og:description"
+      content="A date & time picker for React that only picks the future. Try every layout and option live."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@whoslen123" />
+    <!-- the neobrutalist components demo's font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500..700&display=swap"
+    />
+    <!-- before first paint, so a dark system theme doesn't flash light -->
+    <script>
+      if (matchMedia("(prefers-color-scheme: dark)").matches)
+        document.documentElement.classList.add("dark");
+    </script>
   </head>
   <body>
     <div id="root"></div>

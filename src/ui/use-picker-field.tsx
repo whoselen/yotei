@@ -39,6 +39,8 @@ export interface PickerFieldBaseProps
     Omit<SchedulePickerConfig, "variant"> {
   /** Called when the panel closes -- wire to RHF Controller's field.onBlur */
   onBlur?: () => void;
+  /** Start with the panel open. It still closes as usual: after a pick, Escape, a click outside */
+  defaultOpen?: boolean;
   /**
    * Field name; also submits a hidden input in native forms: `YYYY-MM-DDTHH:mm`,
    * or the exact moment when `valueType` is `"date"`, `"iso"` or `"offset"`
@@ -60,6 +62,7 @@ export function usePickerField(
 ) {
   const {
     onBlur,
+    defaultOpen = false,
     disabled,
     placeholder,
     className,
@@ -104,7 +107,7 @@ export function usePickerField(
     timeZone: config.timeZone,
   });
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
   const panelId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);

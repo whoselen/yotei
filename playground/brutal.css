@@ -1,0 +1,161 @@
+/* Neobrutalism for brutal.tsx: thick ink lines, hard offset shadows, flat
+   loud colors. The swapped parts carry brutal-* classes; the library's own
+   parts are reached through the yotei-* class each one keeps. Lines and
+   offsets are in rem, so they scale with the showcase's stage. */
+
+.brutal {
+  --brutal-ink: #000;
+  --brutal-paper: #fff8e6;
+  --brutal-card: #fff;
+  --brutal-yellow: #ffd23f;
+  --brutal-pink: #ff90e8;
+  --brutal-lime: #a3e635;
+  --brutal-sky: #7dd3fc;
+  --brutal-line: 0.125rem;
+  font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  color: var(--brutal-ink);
+  scrollbar-color: var(--brutal-ink) transparent;
+}
+/* lines and shadows turn white; the colors stay, with black text on them */
+.dark .brutal {
+  --brutal-ink: #fff;
+  --brutal-paper: #171717;
+  --brutal-card: #262626;
+}
+
+/* ── The library's parts ─────────────────────────────────────────── */
+
+.brutal .yotei-popover {
+  /* clear of the trigger's shadow */
+  margin-top: 0.875rem;
+}
+.brutal .yotei-panel {
+  border: var(--brutal-line) solid var(--brutal-ink);
+  border-radius: 0;
+  background: var(--brutal-paper);
+  box-shadow: 0.375rem 0.375rem 0 var(--brutal-ink);
+}
+.brutal .yotei-days {
+  border-bottom: var(--brutal-line) solid var(--brutal-ink);
+}
+.brutal .yotei-column + .yotei-column {
+  border-left: var(--brutal-line) solid var(--brutal-ink);
+}
+.brutal :is(.yotei-month, .yotei-column-label) {
+  color: var(--brutal-ink);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+/* a sticker, slapped on a little crooked */
+.brutal .yotei-month {
+  padding: 0.125rem 0.375rem;
+  border: var(--brutal-line) solid var(--brutal-ink);
+  background: var(--brutal-yellow);
+  color: #000;
+  rotate: -2deg;
+}
+.brutal .yotei-nav {
+  gap: 0.5rem;
+}
+.brutal .yotei-nav-button {
+  --brutal-lift: 0.125rem;
+  width: 1.75rem;
+  height: 1.75rem;
+}
+/* room between the keys for their shadows */
+.brutal .yotei-day-list {
+  gap: 0.5rem;
+}
+.brutal .yotei-list {
+  gap: 0.5rem;
+}
+.brutal .yotei-empty {
+  border: var(--brutal-line) dashed
+    color-mix(in oklab, var(--brutal-ink) 35%, transparent);
+  color: color-mix(in oklab, var(--brutal-ink) 60%, transparent);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* ── Keys: every button, swapped or not ──────────────────────────── */
+
+.brutal :is(.brutal-key, .yotei-nav-button) {
+  --brutal-lift: 0.1875rem;
+  border: var(--brutal-line) solid var(--brutal-ink);
+  border-radius: 0;
+  background: var(--brutal-card);
+  color: var(--brutal-ink);
+  box-shadow: var(--brutal-lift) var(--brutal-lift) 0 var(--brutal-ink);
+  cursor: pointer;
+  transition-property: translate, box-shadow, background-color;
+  transition-duration: 100ms;
+  transition-timing-function: ease-out;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.brutal
+  :is(.brutal-key, .yotei-nav-button):hover:not(:disabled, [data-selected]) {
+  background: var(--brutal-yellow);
+  color: #000;
+}
+/* pressed down onto its own shadow: while held, and once picked */
+.brutal :is(.brutal-key, .yotei-nav-button):active:not(:disabled),
+.brutal .brutal-key[data-selected] {
+  translate: var(--brutal-lift) var(--brutal-lift);
+  box-shadow: 0 0 0 var(--brutal-ink);
+}
+.brutal :is(.brutal-key, .yotei-nav-button):focus-visible {
+  outline: var(--brutal-line) solid var(--brutal-ink);
+  outline-offset: 0.25rem;
+}
+/* the past: taped off */
+.brutal .brutal-key:disabled {
+  border-color: color-mix(in oklab, var(--brutal-ink) 30%, transparent);
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in oklab, var(--brutal-ink) 14%, transparent) 0 0.125rem,
+    transparent 0 0.375rem
+  );
+  color: color-mix(in oklab, var(--brutal-ink) 40%, transparent);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.brutal .brutal-trigger {
+  --brutal-lift: 0.25rem;
+  background: var(--brutal-yellow);
+  color: #000;
+}
+.brutal .brutal-trigger-icon {
+  border-right: var(--brutal-line) solid var(--brutal-ink);
+  background: #000;
+  color: var(--brutal-yellow);
+}
+.brutal .brutal-clear {
+  --brutal-lift: 0.25rem;
+  background: var(--brutal-pink);
+  color: #000;
+}
+.brutal .brutal-day[data-today] .brutal-day-label {
+  background: var(--brutal-ink);
+  color: var(--brutal-paper);
+}
+.brutal .brutal-day[data-selected] {
+  background: var(--brutal-pink);
+  color: #000;
+}
+.brutal .brutal-hour[data-selected] {
+  background: var(--brutal-lime);
+  color: #000;
+}
+.brutal .brutal-minute[data-selected] {
+  background: var(--brutal-sky);
+  color: #000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brutal :is(.brutal-key, .yotei-nav-button) {
+    transition-property: background-color;
+  }
+}

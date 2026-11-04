@@ -862,6 +862,7 @@ also be set on `SchedulePickerProvider`.
 | `defaultValue`       | the `valueType`'s value, or `null`                    | `null`               |          | Initial value when uncontrolled                                              |
 | `onChange`           | `(value) => void`                                     |                      |          | A complete value, or `null` when cleared                                     |
 | `onBlur`             | `() => void`                                          |                      |          | Called when the panel closes                                                 |
+| `defaultOpen`        | `boolean`                                             | `false`              |          | Start with the panel open                                                    |
 | `name`               | `string`                                              |                      |          | Renders a hidden input for forms. See [Forms](#forms)                        |
 | `timeZone`           | `string` (IANA)                                       | the browser's        | ✓        | See [Time zones](#time-zones)                                                |
 | `isSlotDisabled`     | `(slot: Date, moment: Date) => boolean`               |                      |          | See [Availability](#availability-opening-hours-bookings-past-times)          |

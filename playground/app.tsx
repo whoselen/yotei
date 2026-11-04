@@ -22,12 +22,8 @@ import {
   SchedulePicker,
   SchedulePickerProvider,
   toLocalISO,
-  type DayProps,
   type HourCycle,
-  type HourProps,
-  type MinuteProps,
   type SchedulePickerComponents,
-  type ScheduleTimePickerLabels,
   type ScheduleTimePickerValue,
   type ScheduleValue,
   type ScheduleValueType,
@@ -36,26 +32,9 @@ import {
 } from "../src";
 import { cn } from "../src/ui/utils";
 import { SchedulePicker as ShadcnSchedulePicker } from "../registry/schedule-picker";
-
-const jaLabels: Partial<ScheduleTimePickerLabels> = {
-  placeholder: "日時を選択",
-  today: "今日",
-  tomorrow: "明日",
-  tomorrowShort: "明日",
-  hour: "時",
-  minute: "分",
-  pickHourFirst: "先に時間を選択",
-  clear: "クリア",
-  back: "戻る",
-  scrollLeft: "前の日",
-  scrollRight: "次の日",
-  pickDateTime: "日時を指定",
-  inAnHour: "1時間後",
-  thisEvening: "今日の夕方",
-  tomorrowMorning: "明日の朝",
-  tomorrowAfternoon: "明日の午後",
-  nextMonday: "来週の月曜日",
-};
+import { Hero, SiteFooter, SiteNav } from "./site";
+import { brutalComponents } from "./brutal";
+import { jaLabels } from "./shared";
 
 type Value = ScheduleTimePickerValue | null;
 
@@ -77,7 +56,7 @@ function Demo({
       className="flex flex-col gap-3 rounded-xl border bg-background p-5"
     >
       <div>
-        <h2 className="text-sm font-semibold">{title}</h2>
+        <h3 className="text-sm font-semibold">{title}</h3>
         <p className="mt-0.5 text-[13px] text-muted-foreground">
           {description}
         </p>
@@ -140,72 +119,6 @@ const Code = ({ children }: { children: ReactNode }) => (
 );
 
 // ── Custom components: defined once, outside render ─────────────
-
-// days with something on them, as an app might load them
-const isBusy = (date: Date) => date.getDate() % 3 === 0;
-
-const chip =
-  "rounded-full transition-colors not-data-selected:hover:bg-accent disabled:pointer-events-none disabled:opacity-35 data-selected:bg-primary data-selected:text-primary-foreground";
-
-function PillDay({ day, label, ...props }: DayProps) {
-  return (
-    <button
-      {...props}
-      className={cn(
-        chip,
-        "group flex w-12 shrink-0 flex-col items-center gap-1 py-2",
-      )}
-    >
-      <span className="text-[10px] font-medium opacity-70">{label}</span>
-      <span className="text-base leading-none font-semibold">
-        {day.date.getDate()}
-      </span>
-      <span
-        className={cn(
-          "size-1 rounded-full",
-          isBusy(day.date) &&
-            "bg-orange-500 group-data-selected:bg-primary-foreground",
-        )}
-      />
-    </button>
-  );
-}
-
-function ChipHour({ hour, ...props }: HourProps) {
-  const period = (
-    <span className="text-[10px] uppercase opacity-60">{hour.period}</span>
-  );
-  return (
-    <button
-      {...props}
-      className={cn(chip, "flex items-baseline gap-1 px-3 py-1.5 text-sm")}
-    >
-      {hour.periodFirst && period}
-      <span className="font-semibold tabular-nums">{hour.label}</span>
-      {!hour.periodFirst && period}
-    </button>
-  );
-}
-
-function ChipMinute({ minute, ...props }: MinuteProps) {
-  return (
-    <button
-      {...props}
-      className={cn(
-        chip,
-        "px-3 py-1.5 text-left text-sm font-semibold tabular-nums",
-      )}
-    >
-      {minute.label}
-    </button>
-  );
-}
-
-const chipComponents: Partial<SchedulePickerComponents> = {
-  Day: PillDay,
-  Hour: ChipHour,
-  Minute: ChipMinute,
-};
 
 /** The whole time section replaced: every open slot of the day as one grid */
 function SlotGrid({ picker, onComplete }: TimeColumnsProps) {
@@ -520,26 +433,22 @@ export function App() {
       minuteStep={minuteStep}
       labels={locale === "ja-JP" ? jaLabels : undefined}
     >
-      <div className="mx-auto max-w-5xl px-4 py-10">
-        <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mx-auto max-w-5xl px-4">
+        <SiteNav theme={theme} onThemeChange={setTheme} />
+        <Hero />
+
+        <header
+          id="playground"
+          className="mb-6 flex scroll-mt-6 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+        >
           <div>
-            <h1 className="text-xl font-semibold tracking-tight">
-              react-schedule-time-picker
-            </h1>
+            <h2 className="text-lg font-semibold tracking-tight">Playground</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               Three layouts, plain CSS, every part overridable. The toggles
               apply to every picker through <Code>SchedulePickerProvider</Code>.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Toggle
-              options={[
-                ["light", "Light"],
-                ["dark", "Dark"],
-              ]}
-              value={theme}
-              onChange={setTheme}
-            />
             <Toggle
               options={[
                 ["en-US", "EN"],
@@ -825,17 +734,19 @@ export function App() {
             description={
               <>
                 Any markup per item through <Code>components</Code>. Keyboard,
-                focus and selection come with the props you spread. Dots mark
-                busy days.
+                focus and selection come with the props you spread. Here a
+                neobrutalist skin, trigger included, with <Code>className</Code>{" "}
+                styling the parts around them.
               </>
             }
           >
             {(value, onChange) => (
               <SchedulePicker
                 variant="popover"
+                className="brutal"
                 value={value}
                 onChange={onChange}
-                components={chipComponents}
+                components={brutalComponents}
               />
             )}
           </Demo>
@@ -905,6 +816,8 @@ export function App() {
             )}
           </Demo>
         </div>
+
+        <SiteFooter />
       </div>
     </SchedulePickerProvider>
   );

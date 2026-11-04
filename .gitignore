@@ -2,3 +2,5 @@ node_modules
 dist
 dist-playground
 *.tgz
+# the showcase page for recording demos: local only, served by `npm run dev` at /showcase/
+playground/showcase/

@@ -2,6 +2,9 @@
 
 /* the shadcn registry wrapper's token classes */
 @source "../registry";
+/* the showcase page for recording demos: kept local and gitignored, and
+   Tailwind skips gitignored files unless they're named here */
+@source "./showcase";
 
 /* "Plain CSS selectors" demo. Unlayered, so it beats the library's layer
    without !important or specificity games. */

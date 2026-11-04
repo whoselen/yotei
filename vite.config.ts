@@ -17,5 +17,8 @@ export default defineConfig({
       "@/lib/utils": path("./playground/shims/utils.ts"),
     },
   },
-  build: { outDir: "../dist-playground", emptyOutDir: true },
+  build: {
+    outDir: "../dist-playground",
+    emptyOutDir: true,
+  },
 });
