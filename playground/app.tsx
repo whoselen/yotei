@@ -1,4 +1,3 @@
-import { ScheduleTimePicker as OriginalPicker } from "@original";
 import {
   AlarmClock,
   ArrowLeft,
@@ -10,7 +9,13 @@ import {
   Eraser,
   Send,
 } from "lucide-react";
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import {
   fromDate,
   fromISO,
@@ -67,13 +72,21 @@ function Demo({
 }) {
   const [value, setValue] = useState<Value>(null);
   return (
-    <section data-demo={id} className="flex flex-col gap-3 rounded-xl border bg-background p-5">
+    <section
+      data-demo={id}
+      className="flex flex-col gap-3 rounded-xl border bg-background p-5"
+    >
       <div>
         <h2 className="text-sm font-semibold">{title}</h2>
-        <p className="mt-0.5 text-[13px] text-muted-foreground">{description}</p>
+        <p className="mt-0.5 text-[13px] text-muted-foreground">
+          {description}
+        </p>
       </div>
       {children(value, setValue)}
-      <code data-value className="mt-auto pt-1 text-[11px] text-muted-foreground">
+      <code
+        data-value
+        className="mt-auto pt-1 text-[11px] text-muted-foreground"
+      >
         value: {value ? toLocalISO(value) : "null"}
       </code>
     </section>
@@ -136,13 +149,22 @@ const chip =
 
 function PillDay({ day, label, ...props }: DayProps) {
   return (
-    <button {...props} className={cn(chip, "group flex w-12 shrink-0 flex-col items-center gap-1 py-2")}>
+    <button
+      {...props}
+      className={cn(
+        chip,
+        "group flex w-12 shrink-0 flex-col items-center gap-1 py-2",
+      )}
+    >
       <span className="text-[10px] font-medium opacity-70">{label}</span>
-      <span className="text-base leading-none font-semibold">{day.date.getDate()}</span>
+      <span className="text-base leading-none font-semibold">
+        {day.date.getDate()}
+      </span>
       <span
         className={cn(
           "size-1 rounded-full",
-          isBusy(day.date) && "bg-orange-500 group-data-selected:bg-primary-foreground",
+          isBusy(day.date) &&
+            "bg-orange-500 group-data-selected:bg-primary-foreground",
         )}
       />
     </button>
@@ -150,9 +172,14 @@ function PillDay({ day, label, ...props }: DayProps) {
 }
 
 function ChipHour({ hour, ...props }: HourProps) {
-  const period = <span className="text-[10px] uppercase opacity-60">{hour.period}</span>;
+  const period = (
+    <span className="text-[10px] uppercase opacity-60">{hour.period}</span>
+  );
   return (
-    <button {...props} className={cn(chip, "flex items-baseline gap-1 px-3 py-1.5 text-sm")}>
+    <button
+      {...props}
+      className={cn(chip, "flex items-baseline gap-1 px-3 py-1.5 text-sm")}
+    >
       {hour.periodFirst && period}
       <span className="font-semibold tabular-nums">{hour.label}</span>
       {!hour.periodFirst && period}
@@ -162,7 +189,13 @@ function ChipHour({ hour, ...props }: HourProps) {
 
 function ChipMinute({ minute, ...props }: MinuteProps) {
   return (
-    <button {...props} className={cn(chip, "px-3 py-1.5 text-left text-sm font-semibold tabular-nums")}>
+    <button
+      {...props}
+      className={cn(
+        chip,
+        "px-3 py-1.5 text-left text-sm font-semibold tabular-nums",
+      )}
+    >
       {minute.label}
     </button>
   );
@@ -183,12 +216,21 @@ function SlotGrid({ picker, onComplete }: TimeColumnsProps) {
       .map((minute) => ({ hour, minute })),
   );
   if (slots.length === 0) {
-    return <p className="p-4 text-center text-sm text-muted-foreground">No times left this day</p>;
+    return (
+      <p className="p-4 text-center text-sm text-muted-foreground">
+        No times left this day
+      </p>
+    );
   }
   return (
-    <div role="group" aria-label="Times" className="grid max-h-52 grid-cols-3 gap-1.5 overflow-y-auto p-3">
+    <div
+      role="group"
+      aria-label="Times"
+      className="grid max-h-52 grid-cols-3 gap-1.5 overflow-y-auto p-3"
+    >
       {slots.map(({ hour, minute }) => {
-        const selected = picker.selectedHour === hour && picker.selectedMinute === minute;
+        const selected =
+          picker.selectedHour === hour && picker.selectedMinute === minute;
         return (
           <button
             key={`${hour}:${minute}`}
@@ -201,7 +243,9 @@ function SlotGrid({ picker, onComplete }: TimeColumnsProps) {
             }}
             className={cn(
               "rounded-md border px-2 py-1.5 text-xs font-medium tabular-nums transition-colors",
-              selected ? "border-primary bg-primary text-primary-foreground" : "hover:bg-accent",
+              selected
+                ? "border-primary bg-primary text-primary-foreground"
+                : "hover:bg-accent",
             )}
           >
             {picker.fmt.time(hour, minute)}
@@ -212,10 +256,18 @@ function SlotGrid({ picker, onComplete }: TimeColumnsProps) {
   );
 }
 
-const slotComponents: Partial<SchedulePickerComponents> = { TimeColumns: SlotGrid };
+const slotComponents: Partial<SchedulePickerComponents> = {
+  TimeColumns: SlotGrid,
+};
 
 /** The trigger replaced: a two-line button, and a text "Clear" beside it */
-function SendAtTrigger({ picker, open, label, onClear, ...props }: TriggerProps) {
+function SendAtTrigger({
+  picker,
+  open,
+  label,
+  onClear,
+  ...props
+}: TriggerProps) {
   const filled = picker.value !== null;
   return (
     <div className="flex items-center gap-3">
@@ -226,7 +278,9 @@ function SendAtTrigger({ picker, open, label, onClear, ...props }: TriggerProps)
         <span
           className={cn(
             "grid size-8 shrink-0 place-items-center rounded-md",
-            filled ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground",
+            filled
+              ? "bg-primary text-primary-foreground"
+              : "bg-muted text-muted-foreground",
           )}
         >
           <Send className="size-4" />
@@ -237,13 +291,19 @@ function SendAtTrigger({ picker, open, label, onClear, ...props }: TriggerProps)
           </span>
           <span
             suppressHydrationWarning
-            className={cn("truncate text-sm font-medium", !filled && "text-muted-foreground")}
+            className={cn(
+              "truncate text-sm font-medium",
+              !filled && "text-muted-foreground",
+            )}
           >
             {label}
           </span>
         </span>
         <ChevronDown
-          className={cn("ml-auto size-4 shrink-0 text-muted-foreground transition-transform", open && "rotate-180")}
+          className={cn(
+            "ml-auto size-4 shrink-0 text-muted-foreground transition-transform",
+            open && "rotate-180",
+          )}
         />
       </button>
       {filled && !props.disabled && (
@@ -259,7 +319,9 @@ function SendAtTrigger({ picker, open, label, onClear, ...props }: TriggerProps)
   );
 }
 
-const triggerComponents: Partial<SchedulePickerComponents> = { Trigger: SendAtTrigger };
+const triggerComponents: Partial<SchedulePickerComponents> = {
+  Trigger: SendAtTrigger,
+};
 
 const describeOutput = (value: ScheduleValue<ScheduleValueType> | null) =>
   value === null
@@ -273,19 +335,28 @@ const describeOutput = (value: ScheduleValue<ScheduleValueType> | null) =>
 /** One picker per `valueType`: what onChange gets, and what the form submits */
 function ValueTypesDemo({ onChange }: { onChange: (value: Value) => void }) {
   const [type, setType] = useState<ScheduleValueType>("iso");
-  const [output, setOutput] = useState<ScheduleValue<ScheduleValueType> | null>(null);
+  const [output, setOutput] = useState<ScheduleValue<ScheduleValueType> | null>(
+    null,
+  );
   const [submitted, setSubmitted] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
 
   // the hidden input updates with the same render as `output`
   useEffect(() => {
-    if (formRef.current) setSubmitted(String(new FormData(formRef.current).get("when") ?? ""));
+    if (formRef.current)
+      setSubmitted(String(new FormData(formRef.current).get("when") ?? ""));
   }, [output]);
 
   return (
     <div className="flex flex-col items-start gap-3">
       <Toggle
-        options={[["parts", "parts"], ["date", "date"], ["iso", "iso"], ["offset", "offset"], ["local", "local"]]}
+        options={[
+          ["parts", "parts"],
+          ["date", "date"],
+          ["iso", "iso"],
+          ["offset", "offset"],
+          ["local", "local"],
+        ]}
         value={type}
         onChange={(next) => {
           setType(next);
@@ -293,7 +364,11 @@ function ValueTypesDemo({ onChange }: { onChange: (value: Value) => void }) {
           onChange(null);
         }}
       />
-      <form ref={formRef} className="w-full" onSubmit={(event) => event.preventDefault()}>
+      <form
+        ref={formRef}
+        className="w-full"
+        onSubmit={(event) => event.preventDefault()}
+      >
         <SchedulePicker
           key={type}
           variant="popover"
@@ -315,11 +390,17 @@ function ValueTypesDemo({ onChange }: { onChange: (value: Value) => void }) {
       </form>
       <dl className="grid w-full grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-[11px]">
         <dt className="text-muted-foreground">onChange</dt>
-        <dd data-output className="font-mono break-all">{describeOutput(output)}</dd>
+        <dd data-output className="font-mono break-all">
+          {describeOutput(output)}
+        </dd>
         <dt className="text-muted-foreground">form</dt>
-        <dd data-submitted className="font-mono break-all">when={JSON.stringify(submitted)}</dd>
+        <dd data-submitted className="font-mono break-all">
+          when={JSON.stringify(submitted)}
+        </dd>
         <dt className="text-muted-foreground">zone</dt>
-        <dd className="font-mono">{Intl.DateTimeFormat().resolvedOptions().timeZone}</dd>
+        <dd className="font-mono">
+          {Intl.DateTimeFormat().resolvedOptions().timeZone}
+        </dd>
       </dl>
     </div>
   );
@@ -327,7 +408,10 @@ function ValueTypesDemo({ onChange }: { onChange: (value: Value) => void }) {
 
 // opening hours in the picker's own zone: `slot` reads its wall clock
 const isClosed = (slot: Date) =>
-  slot.getDay() === 0 || slot.getDay() === 6 || slot.getHours() < 9 || slot.getHours() >= 17;
+  slot.getDay() === 0 ||
+  slot.getDay() === 6 ||
+  slot.getHours() < 9 ||
+  slot.getHours() >= 17;
 
 /** The same picker in another zone: its today, its opening hours, its offset */
 function TimeZoneDemo({ onChange }: { onChange: (value: Value) => void }) {
@@ -364,7 +448,9 @@ function TimeZoneDemo({ onChange }: { onChange: (value: Value) => void }) {
       </div>
       <dl className="grid w-full grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-[11px]">
         <dt className="text-muted-foreground">onChange</dt>
-        <dd data-output className="font-mono break-all">{JSON.stringify(output)}</dd>
+        <dd data-output className="font-mono break-all">
+          {JSON.stringify(output)}
+        </dd>
         <dt className="text-muted-foreground">your time</dt>
         <dd data-yours className="font-mono">
           {output
@@ -381,13 +467,33 @@ function TimeZoneDemo({ onChange }: { onChange: (value: Value) => void }) {
   );
 }
 
-function RowsDemo({ value, onChange }: { value: Value; onChange: (value: Value) => void }) {
+function RowsDemo({
+  value,
+  onChange,
+}: {
+  value: Value;
+  onChange: (value: Value) => void;
+}) {
   const [rows, setRows] = useState(5);
   return (
     <div className="flex flex-col items-start gap-3">
-      <Toggle options={[[1, "1 row"], [3, "3 rows"], [5, "5 rows"]]} value={rows} onChange={setRows} />
+      <Toggle
+        options={[
+          [1, "1 row"],
+          [3, "3 rows"],
+          [5, "5 rows"],
+        ]}
+        value={rows}
+        onChange={setRows}
+      />
       <div className="w-full">
-        <SchedulePicker variant="popover" dayCount={30} dayRows={rows} value={value} onChange={onChange} />
+        <SchedulePicker
+          variant="popover"
+          dayCount={30}
+          dayRows={rows}
+          value={value}
+          onChange={onChange}
+        />
       </div>
     </div>
   );
@@ -417,19 +523,47 @@ export function App() {
       <div className="mx-auto max-w-5xl px-4 py-10">
         <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-xl font-semibold tracking-tight">react-schedule-time-picker</h1>
+            <h1 className="text-xl font-semibold tracking-tight">
+              react-schedule-time-picker
+            </h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Three layouts, plain CSS, every part overridable. The original is rendered
-              first, untouched. The toggles apply to every picker through{" "}
-              <Code>SchedulePickerProvider</Code>.
+              Three layouts, plain CSS, every part overridable. The toggles
+              apply to every picker through <Code>SchedulePickerProvider</Code>.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Toggle options={[["light", "Light"], ["dark", "Dark"]]} value={theme} onChange={setTheme} />
-            <Toggle options={[["en-US", "EN"], ["ja-JP", "日本語"]]} value={locale} onChange={setLocale} />
-            <Toggle options={[[12, "12h"], [24, "24h"]]} value={hourCycle} onChange={setHourCycle} />
             <Toggle
-              options={[[1, "1m"], [5, "5m"], [15, "15m"], [30, "30m"], [60, "1h"]]}
+              options={[
+                ["light", "Light"],
+                ["dark", "Dark"],
+              ]}
+              value={theme}
+              onChange={setTheme}
+            />
+            <Toggle
+              options={[
+                ["en-US", "EN"],
+                ["ja-JP", "日本語"],
+              ]}
+              value={locale}
+              onChange={setLocale}
+            />
+            <Toggle
+              options={[
+                [12, "12h"],
+                [24, "24h"],
+              ]}
+              value={hourCycle}
+              onChange={setHourCycle}
+            />
+            <Toggle
+              options={[
+                [1, "1m"],
+                [5, "5m"],
+                [15, "15m"],
+                [30, "30m"],
+                [60, "1h"],
+              ]}
               value={minuteStep}
               onChange={setMinuteStep}
             />
@@ -438,19 +572,17 @@ export function App() {
 
         <div className="grid items-start gap-6 md:grid-cols-2">
           <Demo
-            id="original"
-            title="Original"
-            description="schedule-picker.tsx as-is, with Tailwind + shadcn tokens. Ignores locale and hour cycle."
-          >
-            {(value, onChange) => <OriginalPicker value={value} onChange={onChange} />}
-          </Demo>
-
-          <Demo
             id="inline"
             title="Inline"
             description="Default styles from styles.css. Expands in place, collapses after the minute."
           >
-            {(value, onChange) => <SchedulePicker variant="inline" value={value} onChange={onChange} />}
+            {(value, onChange) => (
+              <SchedulePicker
+                variant="inline"
+                value={value}
+                onChange={onChange}
+              />
+            )}
           </Demo>
 
           <Demo
@@ -458,7 +590,13 @@ export function App() {
             title="Popover"
             description="Floats over the page, flips upward near the viewport bottom. Esc or outside press closes."
           >
-            {(value, onChange) => <SchedulePicker variant="popover" value={value} onChange={onChange} />}
+            {(value, onChange) => (
+              <SchedulePicker
+                variant="popover"
+                value={value}
+                onChange={onChange}
+              />
+            )}
           </Demo>
 
           <Demo
@@ -466,7 +604,13 @@ export function App() {
             title="Presets"
             description="One-tap quick picks, with the full picker one level deeper."
           >
-            {(value, onChange) => <SchedulePicker variant="presets" value={value} onChange={onChange} />}
+            {(value, onChange) => (
+              <SchedulePicker
+                variant="presets"
+                value={value}
+                onChange={onChange}
+              />
+            )}
           </Demo>
 
           <Demo
@@ -474,8 +618,10 @@ export function App() {
             title="One component, any layout"
             description={
               <>
-                <Code>variant={"{"}isMobile ? "inline" : "popover"{"}"}</Code>. Resize the
-                window; the value carries over.
+                <Code>
+                  variant={"{"}isMobile ? "inline" : "popover"{"}"}
+                </Code>
+                . Resize the window; the value carries over.
               </>
             }
           >
@@ -493,12 +639,14 @@ export function App() {
             title="A month in rows"
             description={
               <>
-                <Code>dayCount={"{30}"}</Code> with <Code>dayRows</Code>: 1 is the scrolling strip,
-                more lays every day out at once.
+                <Code>dayCount={"{30}"}</Code> with <Code>dayRows</Code>: 1 is
+                the scrolling strip, more lays every day out at once.
               </>
             }
           >
-            {(value, onChange) => <RowsDemo value={value} onChange={onChange} />}
+            {(value, onChange) => (
+              <RowsDemo value={value} onChange={onChange} />
+            )}
           </Demo>
 
           <Demo
@@ -506,8 +654,9 @@ export function App() {
             title="The value you get"
             description={
               <>
-                <Code>valueType</Code> picks what <Code>onChange</Code> gives you and what{" "}
-                <Code>name</Code> submits. The picker itself works in your time zone.
+                <Code>valueType</Code> picks what <Code>onChange</Code> gives
+                you and what <Code>name</Code> submits. The picker itself works
+                in your time zone.
               </>
             }
           >
@@ -519,8 +668,9 @@ export function App() {
             title="Another time zone"
             description={
               <>
-                <Code>timeZone</Code>: today, times and the value are that zone's. Open 9 to 5 on
-                weekdays there, through <Code>isSlotDisabled</Code>.
+                <Code>timeZone</Code>: today, times and the value are that
+                zone's. Open 9 to 5 on weekdays there, through{" "}
+                <Code>isSlotDisabled</Code>.
               </>
             }
           >
@@ -532,13 +682,14 @@ export function App() {
             title="Override: CSS variables"
             description={
               <>
-                <Code>--yotei-primary</Code>, <Code>--yotei-radius</Code> … through the{" "}
-                <Code>style</Code> prop. Works on any ancestor too.
+                <Code>--yotei-primary</Code>, <Code>--yotei-radius</Code> …
+                through the <Code>style</Code> prop. Works on any ancestor too.
               </>
             }
           >
             {(value, onChange) => (
-              <SchedulePicker variant="popover"
+              <SchedulePicker
+                variant="popover"
                 value={value}
                 onChange={onChange}
                 style={
@@ -558,13 +709,14 @@ export function App() {
             title="Override: Tailwind classNames"
             description={
               <>
-                Utilities per part, incl. state variants like <Code>data-selected:</Code>. No{" "}
-                <Code>!</Code> needed.
+                Utilities per part, incl. state variants like{" "}
+                <Code>data-selected:</Code>. No <Code>!</Code> needed.
               </>
             }
           >
             {(value, onChange) => (
-              <SchedulePicker variant="inline"
+              <SchedulePicker
+                variant="inline"
                 value={value}
                 onChange={onChange}
                 classNames={{
@@ -572,7 +724,7 @@ export function App() {
                   trigger: "rounded-full",
                   clear: "rounded-full",
                   panel: "rounded-2xl",
-                  day: "rounded-full",
+                  day: "rounded-5xl",
                   option: "rounded-full data-selected:font-bold",
                 }}
               />
@@ -584,13 +736,18 @@ export function App() {
             title="Override: plain CSS selectors"
             description={
               <>
-                <Code>.yotei-option[data-selected]</Code>, <Code>.yotei-day[data-today]</Code> … from a
-                regular stylesheet.
+                <Code>.yotei-option[data-selected]</Code>,{" "}
+                <Code>.yotei-day[data-today]</Code> … from a regular stylesheet.
               </>
             }
           >
             {(value, onChange) => (
-              <SchedulePicker variant="presets" value={value} onChange={onChange} className="demo-selectors" />
+              <SchedulePicker
+                variant="presets"
+                value={value}
+                onChange={onChange}
+                className="demo-selectors"
+              />
             )}
           </Demo>
 
@@ -599,23 +756,35 @@ export function App() {
             title="Typography"
             description={
               <>
-                Font family, size, weight, spacing, case and figures per text element via{" "}
-                <Code>typography</Code>.
+                Font family, size, weight, spacing, case and figures per text
+                element via <Code>typography</Code>.
               </>
             }
           >
             {(value, onChange) => (
-              <SchedulePicker variant="popover"
+              <SchedulePicker
+                variant="popover"
                 value={value}
                 onChange={onChange}
                 typography={{
                   root: { fontFamily: "Georgia, 'Times New Roman', serif" },
                   triggerLabel: { fontStyle: "italic" },
-                  month: { fontSize: 13, textTransform: "none", letterSpacing: 0 },
+                  month: {
+                    fontSize: 13,
+                    textTransform: "none",
+                    letterSpacing: 0,
+                  },
                   dayLabel: { textTransform: "none", letterSpacing: 0 },
                   dayNumber: { fontSize: 20, fontWeight: 400 },
-                  columnLabel: { fontSize: 12, textTransform: "none", letterSpacing: 0 },
-                  option: { fontWeight: 400, fontVariantNumeric: "tabular-nums" },
+                  columnLabel: {
+                    fontSize: 12,
+                    textTransform: "none",
+                    letterSpacing: 0,
+                  },
+                  option: {
+                    fontWeight: 400,
+                    fontVariantNumeric: "tabular-nums",
+                  },
                   optionPeriod: { fontSize: 11, fontWeight: 400 },
                 }}
               />
@@ -627,13 +796,14 @@ export function App() {
             title="Your own icons"
             description={
               <>
-                Any ReactNode per slot through <Code>icons</Code>; <Code>null</Code> hides one.
-                These are lucide-react.
+                Any ReactNode per slot through <Code>icons</Code>;{" "}
+                <Code>null</Code> hides one. These are lucide-react.
               </>
             }
           >
             {(value, onChange) => (
-              <SchedulePicker variant="inline"
+              <SchedulePicker
+                variant="inline"
                 value={value}
                 onChange={onChange}
                 icons={{
@@ -654,13 +824,19 @@ export function App() {
             title="Your own day, hour and minute"
             description={
               <>
-                Any markup per item through <Code>components</Code>. Keyboard, focus and selection
-                come with the props you spread. Dots mark busy days.
+                Any markup per item through <Code>components</Code>. Keyboard,
+                focus and selection come with the props you spread. Dots mark
+                busy days.
               </>
             }
           >
             {(value, onChange) => (
-              <SchedulePicker variant="popover" value={value} onChange={onChange} components={chipComponents} />
+              <SchedulePicker
+                variant="popover"
+                value={value}
+                onChange={onChange}
+                components={chipComponents}
+              />
             )}
           </Demo>
 
@@ -669,13 +845,19 @@ export function App() {
             title="Your own trigger"
             description={
               <>
-                <Code>components.Trigger</Code>: any button, with the picker's state as props.
-                Focus, ARIA and the popover's placement come with the props you spread.
+                <Code>components.Trigger</Code>: any button, with the picker's
+                state as props. Focus, ARIA and the popover's placement come
+                with the props you spread.
               </>
             }
           >
             {(value, onChange) => (
-              <SchedulePicker variant="popover" value={value} onChange={onChange} components={triggerComponents} />
+              <SchedulePicker
+                variant="popover"
+                value={value}
+                onChange={onChange}
+                components={triggerComponents}
+              />
             )}
           </Demo>
 
@@ -684,8 +866,8 @@ export function App() {
             title="Your own time section"
             description={
               <>
-                <Code>components.TimeColumns</Code> swapped for a grid of open slots, with{" "}
-                <Code>minuteStep={"{30}"}</Code>.
+                <Code>components.TimeColumns</Code> swapped for a grid of open
+                slots, with <Code>minuteStep={"{30}"}</Code>.
               </>
             }
           >
@@ -705,15 +887,20 @@ export function App() {
             title="shadcn/ui registry"
             description={
               <>
-                The wrapper <Code>npx shadcn add</Code> copies in, mapped to your theme tokens. This
-                card only changes shadcn's <Code>--primary</Code>, <Code>--ring</Code> and{" "}
+                The wrapper <Code>npx shadcn add</Code> copies in, mapped to
+                your theme tokens. This card only changes shadcn's{" "}
+                <Code>--primary</Code>, <Code>--ring</Code> and{" "}
                 <Code>--radius</Code>.
               </>
             }
           >
             {(value, onChange) => (
               <div className="[--primary-foreground:white] [--primary:oklch(0.546_0.245_262.881)] [--radius:1rem] [--ring:oklch(0.707_0.165_254.624)]">
-                <ShadcnSchedulePicker variant="popover" value={value} onChange={onChange} />
+                <ShadcnSchedulePicker
+                  variant="popover"
+                  value={value}
+                  onChange={onChange}
+                />
               </div>
             )}
           </Demo>

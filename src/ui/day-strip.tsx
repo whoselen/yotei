@@ -8,7 +8,10 @@ import {
   type KeyboardEvent,
 } from "react";
 import { dayKey } from "../core/date";
-import type { PickerDay, SchedulePickerState } from "../core/use-schedule-picker";
+import type {
+  PickerDay,
+  SchedulePickerState,
+} from "../core/use-schedule-picker";
 import { useConfig, useParts } from "./config";
 import { flag } from "./utils";
 
@@ -19,7 +22,7 @@ import { flag } from "./utils";
  */
 export interface DayProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   day: PickerDay;
-  /** The top line as the default cell shows it: "Today", "Tmrw", "Nov" on the 1st, else "Wed" */
+  /** A short name for the day: "Today", "Tmrw", "Nov" on the 1st, else "Wed" (the default cell shows it only for today) */
   label: string;
 }
 
@@ -37,7 +40,10 @@ export interface DayStripProps {
 
 /** `dayRows` as laid out: a whole number from 1 to the number of days */
 export function dayRowCount(rows: number | undefined, dayCount: number) {
-  return Math.min(Math.max(1, Math.floor(rows ?? 1) || 1), Math.max(1, dayCount));
+  return Math.min(
+    Math.max(1, Math.floor(rows ?? 1) || 1),
+    Math.max(1, dayCount),
+  );
 }
 
 /** Roughly how much taller rows of days make the panel than the strip -- for flip decisions */
@@ -49,9 +55,14 @@ export function extraDayRowsHeight(rows: number | undefined, dayCount: number) {
  * Arrow keys move between days, ↑ ↓ by a whole row in the grid, so all the
  * days are one tab stop. Landing on a past or blocked day moves on past it.
  */
-function handleDayKeyDown(event: KeyboardEvent<HTMLDivElement>, rowLength: number | null) {
+function handleDayKeyDown(
+  event: KeyboardEvent<HTMLDivElement>,
+  rowLength: number | null,
+) {
   // found by the props every day spreads, so custom `Day` components work too
-  const days = Array.from(event.currentTarget.querySelectorAll<HTMLElement>("[aria-pressed]"));
+  const days = Array.from(
+    event.currentTarget.querySelectorAll<HTMLElement>("[aria-pressed]"),
+  );
   const index = days.indexOf(document.activeElement as HTMLElement);
   if (index === -1) return;
   const isOpen = (day: HTMLElement) => !day.hasAttribute("data-disabled");
@@ -67,7 +78,11 @@ function handleDayKeyDown(event: KeyboardEvent<HTMLDivElement>, rowLength: numbe
   if (event.key === "Home") target = enabled[0];
   else if (event.key === "End") target = enabled[enabled.length - 1];
   else if (step) {
-    for (let i = index + step; !target && i >= 0 && i < days.length; i += Math.sign(step)) {
+    for (
+      let i = index + step;
+      !target && i >= 0 && i < days.length;
+      i += Math.sign(step)
+    ) {
       if (isOpen(days[i])) target = days[i];
     }
   } else return;
@@ -75,7 +90,11 @@ function handleDayKeyDown(event: KeyboardEvent<HTMLDivElement>, rowLength: numbe
   target?.focus();
 }
 
-export function DayStrip({ picker, visible = true, rows: rowsProp }: DayStripProps) {
+export function DayStrip({
+  picker,
+  visible = true,
+  rows: rowsProp,
+}: DayStripProps) {
   const { days, labels, fmt, selectedDay } = picker;
   const { cls, text, icons, components } = useParts();
   const Day = components.Day ?? DefaultDay;
@@ -84,11 +103,41 @@ export function DayStrip({ picker, visible = true, rows: rowsProp }: DayStripPro
   const grid = rows > 1;
   const rowLength = Math.ceil(days.length / rows);
   const stripRef = useRef<HTMLDivElement>(null);
+  // where the nav buttons last sent the strip, until it comes to rest
+  const scrollTarget = useRef<number | null>(null);
+  const settleTimer = useRef(0);
   const selectedKey = dayKey(selectedDay);
-  const tabStop = days.find((d) => d.isSelected)?.key ?? days.find((d) => !d.isDisabled)?.key;
+  const tabStop =
+    days.find((d) => d.isSelected)?.key ?? days.find((d) => !d.isDisabled)?.key;
 
+  // a page of whole days, counted from where a running scroll is headed rather
+  // than where it is mid-way, so quick clicks add up instead of cutting it short
   const scrollStrip = (direction: -1 | 1) => {
-    stripRef.current?.scrollBy({ left: direction * 160, behavior: "smooth" });
+    const strip = stripRef.current;
+    const dayEls = strip?.querySelectorAll<HTMLElement>("[aria-pressed]");
+    if (!strip || !dayEls || dayEls.length < 2) return;
+    // measured, so it follows your CSS and custom `Day`s
+    const pitch =
+      dayEls[1].getBoundingClientRect().left -
+      dayEls[0].getBoundingClientRect().left;
+    if (!(pitch > 0)) return;
+    const perPage = Math.max(1, Math.floor(strip.clientWidth / pitch));
+    const from = Math.round((scrollTarget.current ?? strip.scrollLeft) / pitch);
+    const left = Math.min(
+      Math.max(0, (from + direction * perPage) * pitch),
+      strip.scrollWidth - strip.clientWidth,
+    );
+    scrollTarget.current = left;
+    strip.scrollTo({ left, behavior: "smooth" });
+  };
+
+  // a running scroll fires every frame, so a short pause means it's over --
+  // forget the target then, so a swipe or wheel scroll is where the next click starts
+  const handleScroll = () => {
+    window.clearTimeout(settleTimer.current);
+    settleTimer.current = window.setTimeout(() => {
+      scrollTarget.current = null;
+    }, 150);
   };
 
   // keep the selected day in view, e.g. when a value 10 days out is loaded
@@ -99,9 +148,15 @@ export function DayStrip({ picker, visible = true, rows: rowsProp }: DayStripPro
     if (!strip || !day) return;
     // measured from rects so it doesn't depend on how the strip is positioned
     const start =
-      day.getBoundingClientRect().left - strip.getBoundingClientRect().left - strip.clientLeft + strip.scrollLeft;
+      day.getBoundingClientRect().left -
+      strip.getBoundingClientRect().left -
+      strip.clientLeft +
+      strip.scrollLeft;
     const end = start + day.offsetWidth;
-    if (start < strip.scrollLeft || end > strip.scrollLeft + strip.clientWidth) {
+    if (
+      start < strip.scrollLeft ||
+      end > strip.scrollLeft + strip.clientWidth
+    ) {
       strip.scrollTo({
         left: start - (strip.clientWidth - day.offsetWidth) / 2,
         behavior: "smooth",
@@ -110,7 +165,7 @@ export function DayStrip({ picker, visible = true, rows: rowsProp }: DayStripPro
   }, [visible, selectedKey]);
 
   return (
-    <div className={cls("days")}>
+    <div className={cls("days")} data-layout={grid ? "grid" : "strip"}>
       <div className={cls("daysHeader")}>
         <span className={cls("month")} style={text("month")}>
           {/* the grid shows every day at once, so name every month in it */}
@@ -149,8 +204,13 @@ export function DayStrip({ picker, visible = true, rows: rowsProp }: DayStripPro
       <div
         ref={stripRef}
         data-layout={grid ? "grid" : "strip"}
-        style={grid ? ({ "--yotei-day-columns": rowLength } as CSSProperties) : undefined}
+        style={
+          grid
+            ? ({ "--yotei-day-columns": rowLength } as CSSProperties)
+            : undefined
+        }
         onKeyDown={(event) => handleDayKeyDown(event, grid ? rowLength : null)}
+        onScroll={handleScroll}
         className={cls("dayList")}
       >
         {days.map((day) => {
@@ -173,7 +233,9 @@ export function DayStrip({ picker, visible = true, rows: rowsProp }: DayStripPro
               tabIndex={day.key === tabStop ? 0 : -1}
               aria-pressed={day.isSelected}
               aria-label={
-                day.isToday ? `${labels.today}, ${fmt.fullDate(day.date)}` : fmt.fullDate(day.date)
+                day.isToday
+                  ? `${labels.today}, ${fmt.fullDate(day.date)}`
+                  : fmt.fullDate(day.date)
               }
               data-selected={flag(day.isSelected)}
               data-today={flag(day.isToday)}
@@ -182,16 +244,18 @@ export function DayStrip({ picker, visible = true, rows: rowsProp }: DayStripPro
               onClick={() => picker.selectDay(day.date)}
               className={cls("day")}
             >
-              <span className={cls("dayLabel")} style={text("dayLabel")}>
-                {label}
-              </span>
+              {/* only today spells itself out; every day's full date is in its aria-label */}
+              {day.isToday && (
+                <span className={cls("dayLabel")} style={text("dayLabel")}>
+                  {label}
+                </span>
+              )}
               <span className={cls("dayNumber")} style={text("dayNumber")}>
                 {day.date.getDate()}
               </span>
               <span className={cls("dayWeekday")} style={text("dayWeekday")}>
                 {fmt.weekday(day.date)}
               </span>
-              {day.isToday && <span className={cls("todayDot")} />}
             </Day>
           );
         })}

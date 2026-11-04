@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-/* the untouched original, rendered for comparison */
-@source "../../schedule-picker.tsx";
 /* the shadcn registry wrapper's token classes */
 @source "../registry";
 

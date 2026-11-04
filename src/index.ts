@@ -3,7 +3,7 @@
 // ── The component: <SchedulePicker variant="inline" | "popover" | "presets"> ──
 export {
   SchedulePicker,
-  /** Drop-in name for the original component */
+  /** The same component, under the package's name */
   SchedulePicker as ScheduleTimePicker,
   type SchedulePickerProps,
 } from "./picker";

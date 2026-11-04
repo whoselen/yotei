@@ -4,7 +4,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { addDays, atTime, dayKey, isSameDay, startOfDay } from "./date";
 import { createFormatters, type HourCycle, type HourLabel } from "./format";
 import { defaultLabels, type ScheduleTimePickerLabels } from "./labels";
-import type { ScheduleTimePickerValue, ScheduleValue, ScheduleValueType } from "./types";
+import type {
+  ScheduleTimePickerValue,
+  ScheduleValue,
+  ScheduleValueType,
+} from "./types";
 import { useNow } from "./use-now";
 import { parseValue, serializeValue } from "./value";
 import { exactMomentIn, resolveTimeZone, wallClockIn } from "./zone";
@@ -55,8 +59,8 @@ export interface SchedulePickerOptions {
   isSlotDisabled?: (slot: Date, moment: Date) => boolean;
 }
 
-export type UseSchedulePickerOptions<T extends ScheduleValueType = "parts"> = SchedulePickerOptions &
-  ScheduleValueProps<T>;
+export type UseSchedulePickerOptions<T extends ScheduleValueType = "parts"> =
+  SchedulePickerOptions & ScheduleValueProps<T>;
 
 export interface PickerDay {
   date: Date;
@@ -96,7 +100,9 @@ function valueKey(value: Value) {
 
 /** A whole number of minutes from 1 to 60; anything unusable falls back to 5 */
 function normalizeStep(step: number) {
-  return Number.isFinite(step) ? Math.min(60, Math.max(1, Math.round(step))) : 5;
+  return Number.isFinite(step)
+    ? Math.min(60, Math.max(1, Math.round(step)))
+    : 5;
 }
 
 function draftFrom(value: Value, fallbackDay: Date): Draft {
@@ -128,19 +134,31 @@ export function useSchedulePicker<T extends ScheduleValueType = "parts">({
   // With a time zone, `now` and every date below read its wall clock.
   const zone = resolveTimeZone(timeZone);
   const clock = useNow();
-  const now = useMemo(() => (clock && zone ? wallClockIn(clock, zone) : clock), [clock, zone]);
+  const now = useMemo(
+    () => (clock && zone ? wallClockIn(clock, zone) : clock),
+    [clock, zone],
+  );
   const nowTime = now ? now.getTime() : null;
   const hasClock = nowTime !== null;
   const todayTime = startOfDay(now ?? new Date(0)).getTime();
   const today = useMemo(() => new Date(todayTime), [todayTime]);
   const dayDates = useMemo(
-    () => (hasClock ? Array.from({ length: dayCount }, (_, i) => addDays(today, i)) : []),
+    () =>
+      hasClock
+        ? Array.from({ length: dayCount }, (_, i) => addDays(today, i))
+        : [],
     [hasClock, today, dayCount],
   );
   const rangeEnd = addDays(today, dayCount).getTime();
 
-  const labels = useMemo(() => ({ ...defaultLabels, ...labelOverrides }), [labelOverrides]);
-  const fmt = useMemo(() => createFormatters(locale, hourCycle), [locale, hourCycle]);
+  const labels = useMemo(
+    () => ({ ...defaultLabels, ...labelOverrides }),
+    [labelOverrides],
+  );
+  const fmt = useMemo(
+    () => createFormatters(locale, hourCycle),
+    [locale, hourCycle],
+  );
   const minuteStep = normalizeStep(rawMinuteStep);
   const minuteSlots = useMemo(() => {
     const slots: number[] = [];
@@ -177,7 +195,8 @@ export function useSchedulePicker<T extends ScheduleValueType = "parts">({
       if (nowTime === null || time <= nowTime || time >= rangeEnd) return false;
       // Times skipped when clocks spring forward (2:30 AM) don't exist: in the
       // picker's zone, and -- as local dates can't hold them -- in the browser's
-      if (slot.getHours() !== hour || slot.getMinutes() !== minute) return false;
+      if (slot.getHours() !== hour || slot.getMinutes() !== minute)
+        return false;
       const moment = zone ? exactMomentIn(day, hour, minute, zone) : slot;
       return moment !== null && !isSlotDisabled?.(slot, moment);
     },
@@ -185,7 +204,8 @@ export function useSchedulePicker<T extends ScheduleValueType = "parts">({
   );
 
   const isHourAvailable = useCallback(
-    (day: Date, hour: number) => minuteSlots.some((m) => isSlotAvailable(day, hour, m)),
+    (day: Date, hour: number) =>
+      minuteSlots.some((m) => isSlotAvailable(day, hour, m)),
     [minuteSlots, isSlotAvailable],
   );
 
@@ -215,7 +235,9 @@ export function useSchedulePicker<T extends ScheduleValueType = "parts">({
     ? draft.day
     : (dayDates.find((d) => isDayAvailable(d)) ?? today);
   const selectedHour =
-    draft.hour !== null && isHourAvailable(selectedDay, draft.hour) ? draft.hour : null;
+    draft.hour !== null && isHourAvailable(selectedDay, draft.hour)
+      ? draft.hour
+      : null;
   const selectedMinute =
     selectedHour !== null &&
     draft.minute !== null &&
@@ -225,7 +247,11 @@ export function useSchedulePicker<T extends ScheduleValueType = "parts">({
 
   // ...and so does a committed value (once there's a clock to compare it with)
   useEffect(() => {
-    if (hasClock && committed && !isSlotAvailable(committed.date, committed.hour, committed.minute)) {
+    if (
+      hasClock &&
+      committed &&
+      !isSlotAvailable(committed.date, committed.hour, committed.minute)
+    ) {
       commit(null);
     }
   }, [hasClock, committed, isSlotAvailable, commit]);
@@ -240,18 +266,25 @@ export function useSchedulePicker<T extends ScheduleValueType = "parts">({
     if (hour !== null && !isHourAvailable(day, hour)) {
       hour = null;
       minute = null;
-    } else if (hour !== null && minute !== null && !isSlotAvailable(day, hour, minute)) {
+    } else if (
+      hour !== null &&
+      minute !== null &&
+      !isSlotAvailable(day, hour, minute)
+    ) {
       minute = null;
     }
     setDraft({ day, hour, minute });
-    commit(hour !== null && minute !== null ? { date: day, hour, minute } : null);
+    commit(
+      hour !== null && minute !== null ? { date: day, hour, minute } : null,
+    );
     return true;
   };
 
   const selectHour = (hour: number) => {
     if (!isHourAvailable(selectedDay, hour)) return false;
     let minute =
-      selectedMinute !== null && isSlotAvailable(selectedDay, hour, selectedMinute)
+      selectedMinute !== null &&
+      isSlotAvailable(selectedDay, hour, selectedMinute)
         ? selectedMinute
         : null;
     // an hourly step has a single slot, so the hour alone completes the pick
@@ -262,7 +295,10 @@ export function useSchedulePicker<T extends ScheduleValueType = "parts">({
   };
 
   const selectMinute = (minute: number) => {
-    if (selectedHour === null || !isSlotAvailable(selectedDay, selectedHour, minute)) {
+    if (
+      selectedHour === null ||
+      !isSlotAvailable(selectedDay, selectedHour, minute)
+    ) {
       return false;
     }
     setDraft({ day: selectedDay, hour: selectedHour, minute });

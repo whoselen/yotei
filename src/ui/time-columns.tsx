@@ -1,8 +1,17 @@
 "use client";
 
-import { useEffect, useRef, type ButtonHTMLAttributes, type KeyboardEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  type ButtonHTMLAttributes,
+  type KeyboardEvent,
+} from "react";
 import { dayKey } from "../core/date";
-import type { PickerHour, PickerMinute, SchedulePickerState } from "../core/use-schedule-picker";
+import type {
+  PickerHour,
+  PickerMinute,
+  SchedulePickerState,
+} from "../core/use-schedule-picker";
 import { useParts } from "./config";
 import { IconSlot } from "./trigger";
 import { flag } from "./utils";
@@ -44,7 +53,10 @@ function scrollToActive(list: HTMLElement | null) {
   if (!list || !target) return;
   // measured from rects so it doesn't depend on how the list is positioned
   const top =
-    target.getBoundingClientRect().top - list.getBoundingClientRect().top - list.clientTop + list.scrollTop;
+    target.getBoundingClientRect().top -
+    list.getBoundingClientRect().top -
+    list.clientTop +
+    list.scrollTop;
   list.scrollTo({ top: top - 4, behavior: "smooth" });
 }
 
@@ -61,7 +73,9 @@ const ARROW_KEYS: Record<string, (index: number, last: number) => number> = {
 function handleListKeyDown(event: KeyboardEvent<HTMLDivElement>) {
   const move = ARROW_KEYS[event.key];
   if (!move) return;
-  const options = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(OPEN_OPTION));
+  const options = Array.from(
+    event.currentTarget.querySelectorAll<HTMLElement>(OPEN_OPTION),
+  );
   const index = options.indexOf(document.activeElement as HTMLElement);
   if (index === -1) return;
   event.preventDefault();
@@ -69,7 +83,11 @@ function handleListKeyDown(event: KeyboardEvent<HTMLDivElement>) {
   options[Math.min(last, Math.max(0, move(index, last)))]?.focus();
 }
 
-export function TimeColumns({ picker, visible = true, onComplete }: TimeColumnsProps) {
+export function TimeColumns({
+  picker,
+  visible = true,
+  onComplete,
+}: TimeColumnsProps) {
   const { labels, hours, minutes, selectedHour, selectedMinute } = picker;
   const { cls, text, icons, components } = useParts();
   const Hour = components.Hour ?? DefaultHour;
@@ -82,19 +100,24 @@ export function TimeColumns({ picker, visible = true, onComplete }: TimeColumnsP
 
   useEffect(() => {
     if (!visible) return;
-    const frame = requestAnimationFrame(() => scrollToActive(hourListRef.current));
+    const frame = requestAnimationFrame(() =>
+      scrollToActive(hourListRef.current),
+    );
     return () => cancelAnimationFrame(frame);
   }, [visible, selectedDayKey]);
 
   // with small steps the first open minute can be far down (e.g. :38 of 60)
   useEffect(() => {
     if (!visible) return;
-    const frame = requestAnimationFrame(() => scrollToActive(minuteListRef.current));
+    const frame = requestAnimationFrame(() =>
+      scrollToActive(minuteListRef.current),
+    );
     return () => cancelAnimationFrame(frame);
   }, [visible, selectedDayKey, selectedHour]);
 
   const hourTabStop = selectedHour ?? hours.find((h) => !h.isDisabled)?.value;
-  const minuteTabStop = selectedMinute ?? minutes.find((m) => !m.isDisabled)?.value;
+  const minuteTabStop =
+    selectedMinute ?? minutes.find((m) => !m.isDisabled)?.value;
 
   return (
     <div className={cls("time")}>
@@ -140,7 +163,9 @@ export function TimeColumns({ picker, visible = true, onComplete }: TimeColumnsP
                   {hour.label}
                   {!hour.periodFirst && period}
                 </span>
-                {hour.isSelected && <IconSlot icon={icons.check} className={cls("optionCheck")} />}
+                {hour.isSelected && (
+                  <IconSlot icon={icons.check} className={cls("optionCheck")} />
+                )}
               </Hour>
             );
           })}
@@ -182,7 +207,10 @@ export function TimeColumns({ picker, visible = true, onComplete }: TimeColumnsP
                 >
                   <span className={cls("optionLabel")}>{minute.label}</span>
                   {minute.isSelected && (
-                    <IconSlot icon={icons.check} className={cls("optionCheck")} />
+                    <IconSlot
+                      icon={icons.check}
+                      className={cls("optionCheck")}
+                    />
                   )}
                 </Minute>
               ))

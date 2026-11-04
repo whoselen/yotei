@@ -520,7 +520,7 @@ Every element has a stable `yotei-*` class, and state is in data attributes:
 | `data-disabled`           | `.yotei-day`, `.yotei-option` (past or blocked); `.yotei-root` when `disabled`             |
 | `data-today`              | `.yotei-day`                                                                               |
 | `data-month-start`        | `.yotei-day` on the 1st of a month                                                         |
-| `data-layout`             | `.yotei-day-list`: `strip` or `grid`                                                       |
+| `data-layout`             | `.yotei-days`, `.yotei-day-list`: `strip` or `grid`                                        |
 | `data-filled`             | `.yotei-trigger` once a time is picked                                                     |
 | `data-state`              | `open` or `closed` on `.yotei-root`, `.yotei-trigger`, `.yotei-collapse`, `.yotei-popover` |
 | `data-side`, `data-align` | `.yotei-popover`                                                                           |
@@ -545,7 +545,7 @@ Part keys: `root` · `triggerRow` · `trigger` · `triggerIcon` · `triggerLabel
 `triggerIndicator` · `clear` · `collapse` · `popover` · `panel` ·
 `panelHeader` · `back` · `days` · `daysHeader` · `month` · `nav` ·
 `navButton` · `dayList` · `day` · `dayLabel` · `dayNumber` · `dayWeekday` ·
-`todayDot` · `time` · `column` · `columnLabel` · `list` · `option` ·
+`time` · `column` · `columnLabel` · `list` · `option` ·
 `optionLabel` · `optionPeriod` · `optionCheck` · `empty` · `presets` ·
 `preset` · `presetIcon` · `presetLabel` · `presetHint` · `presetCheck` ·
 `presetArrow` · `separator`. Each key's class is its kebab-case form:

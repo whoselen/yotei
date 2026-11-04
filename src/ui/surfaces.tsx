@@ -67,7 +67,7 @@ const hiddenStyle = { display: "none" } as const;
 // time, which server HTML and the browser don't agree on (clock or time zone),
 // so a closed picker hydrates cleanly -- and a page of pickers stays light.
 
-/** The original's inline panel: grows open in place, pushing content down */
+/** The inline panel: grows open in place, pushing content down */
 export function Collapse({ open, id, children }: { open: boolean; id?: string; children: ReactNode }) {
   const { cls } = useParts();
   const ref = useRef<HTMLDivElement>(null);

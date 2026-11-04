@@ -17,8 +17,7 @@ import {
 export type InlineSchedulePickerProps<T extends ScheduleValueType = "parts"> = PickerFieldProps<T>;
 
 /**
- * The original design: a trigger that expands an inline panel, pushing the
- * content below it down. Collapses on its own once a minute is picked.
+ * A trigger that expands an inline panel, pushing the content below it down. Collapses on its own once a minute is picked.
  */
 export const InlineSchedulePicker = forwardRef<
   HTMLButtonElement,

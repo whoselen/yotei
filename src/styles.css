@@ -25,12 +25,16 @@
 
   :where(:root, :host) {
     --yotei-radius: 0.625rem;
-    --yotei-list-height: 180px;
+    --yotei-list-height: 11.25rem;
     --yotei-popover-width: 20rem;
 
+    /* shadows, like the 1px hairlines below, stay in px: they shouldn't
+       thicken with the font size */
     --yotei-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --yotei-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --yotei-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --yotei-shadow-sm:
+      0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --yotei-shadow-lg:
+      0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
     --yotei-light-foreground: oklch(0.145 0 0);
     --yotei-light-surface: oklch(1 0 0);
@@ -137,11 +141,24 @@
     /* scrollbars follow the picker's mode, without touching the page's */
     color-scheme: var(--yotei-color-scheme);
   }
-  :where(.yotei-root, .yotei-root *, .yotei-root ::before, .yotei-root ::after) {
+  :where(
+    .yotei-root,
+    .yotei-root *,
+    .yotei-root ::before,
+    .yotei-root ::after
+  ) {
     box-sizing: border-box;
   }
   /* only the picker's own buttons: custom components keep your page's styles */
-  :where(.yotei-trigger, .yotei-clear, .yotei-nav-button, .yotei-back, .yotei-day, .yotei-option, .yotei-preset) {
+  :where(
+    .yotei-trigger,
+    .yotei-clear,
+    .yotei-nav-button,
+    .yotei-back,
+    .yotei-day,
+    .yotei-option,
+    .yotei-preset
+  ) {
     margin: 0;
     padding: 0;
     border: 0;
@@ -153,7 +170,12 @@
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }
-  :where(.yotei-trigger:disabled, .yotei-clear:disabled, .yotei-day:disabled, .yotei-option:disabled) {
+  :where(
+    .yotei-trigger:disabled,
+    .yotei-clear:disabled,
+    .yotei-day:disabled,
+    .yotei-option:disabled
+  ) {
     cursor: not-allowed;
   }
   /* icons -- yours included -- are sized by the slot they sit in */
@@ -186,7 +208,7 @@
     align-items: center;
     height: 2.25rem;
     border: 1px solid var(--yotei-input);
-    border-radius: calc(var(--yotei-radius) - 2px);
+    border-radius: calc(var(--yotei-radius) - 0.125rem);
     background: var(--yotei-field);
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -332,7 +354,7 @@
   /* ── Day strip ─────────────────────────────────────────────────── */
 
   :where(.yotei-days) {
-    padding: 0.75rem 0.75rem 0.5rem;
+    padding: 0.5rem 0.75rem 0;
     border-bottom: 1px solid var(--yotei-border);
   }
   :where(.yotei-days-header) {
@@ -343,12 +365,10 @@
   }
   :where(.yotei-month, .yotei-column-label) {
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
     color: var(--yotei-muted-foreground);
   }
   :where(.yotei-month) {
-    font-size: 11px;
+    font-size: 0.75rem;
     line-height: 1rem;
   }
   :where(.yotei-nav) {
@@ -362,7 +382,7 @@
     justify-content: center;
     width: 1.5rem;
     height: 1.5rem;
-    border-radius: calc(var(--yotei-radius) - 2px);
+    border-radius: calc(var(--yotei-radius) - 0.125rem);
     color: var(--yotei-muted-foreground);
     transition-property: color, background-color;
     transition-duration: 150ms;
@@ -379,7 +399,7 @@
     gap: 0.375rem;
     width: 0;
     min-width: 100%;
-    padding: 0.125rem 0 0.25rem;
+    padding: 0.5rem 0 0.75rem;
     overflow-x: auto;
     scrollbar-width: thin;
   }
@@ -388,44 +408,43 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* centred in the height today's extra lines give the row */
+    justify-content: center;
     flex-shrink: 0;
     width: 3rem;
-    padding: 0.375rem 0;
+    /* every day has the border, so today's dashed one doesn't resize it */
+    padding: 0.3125rem 0;
+    border: 1px solid transparent;
     border-radius: var(--yotei-radius);
     text-align: center;
-    transition-property: color, background-color;
+    transition-property: color, background-color, border-color;
     transition-duration: 150ms;
+    -webkit-user-select: none;
+    user-select: none;
   }
   :where(.yotei-day:hover) {
     background: var(--yotei-muted);
   }
   :where(.yotei-day-label, .yotei-day-weekday) {
-    font-size: 9px;
+    font-size: 0.5625rem;
     line-height: 1.25;
     color: var(--yotei-muted-foreground);
   }
   :where(.yotei-day-label) {
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
   }
   :where(.yotei-day-weekday) {
     font-weight: 500;
   }
+  /* every day but today is just its number, so the number fills the cell */
   :where(.yotei-day-number) {
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.375;
+    font-size: 1.375rem;
+    font-weight: normal;
+    line-height: 1.25;
   }
-  :where(.yotei-today-dot) {
-    position: absolute;
-    top: -0.125rem;
-    left: 50%;
-    width: 0.25rem;
-    height: 0.25rem;
-    translate: -50% 0;
-    border-radius: 9999px;
-    background: var(--yotei-primary);
+  :where(.yotei-day[data-today] .yotei-day-number) {
+    font-weight: bold;
   }
   :where(.yotei-day[data-disabled]) {
     background: none;
@@ -437,42 +456,49 @@
     box-shadow: var(--yotei-shadow-sm);
   }
   :where(.yotei-day[data-selected] .yotei-day-label) {
-    color: color-mix(in oklab, var(--yotei-primary-foreground) 80%, transparent);
+    color: color-mix(
+      in oklab,
+      var(--yotei-primary-foreground) 80%,
+      transparent
+    );
   }
   :where(.yotei-day[data-selected] .yotei-day-weekday) {
-    color: color-mix(in oklab, var(--yotei-primary-foreground) 70%, transparent);
-  }
-  :where(.yotei-day[data-selected] .yotei-today-dot) {
-    background: var(--yotei-primary-foreground);
-  }
-  /* the 1st names its month, so a "1" after "31" reads right */
-  :where(.yotei-day[data-month-start]:not([data-selected], [data-disabled]) .yotei-day-label) {
-    color: var(--yotei-foreground);
+    color: color-mix(
+      in oklab,
+      var(--yotei-primary-foreground) 70%,
+      transparent
+    );
   }
 
   /* dayRows > 1: every day at once, the rows sharing the panel's width */
+  :where(.yotei-days[data-layout="grid"]) {
+    padding: 0.75rem 0.75rem 0;
+  }
   :where(.yotei-day-list[data-layout="grid"]) {
     display: grid;
     grid-template-columns: repeat(var(--yotei-day-columns, 7), minmax(0, 1fr));
+    /* every row as tall as today's, which has its label */
+    grid-auto-rows: 1fr;
     gap: 0.25rem;
   }
   :where(.yotei-day-list[data-layout="grid"] .yotei-day) {
     container-type: inline-size;
     width: auto;
-    padding: 0.3125rem 0;
+    padding: 0.25rem 0;
   }
-  /* many days to a row: cells too narrow for "TODAY" keep just the number
-     (today keeps its dot, and every day its full date for screen readers) */
+  /* many days to a row: cells too narrow for "TODAY" keep just the number, at
+     a size that fits (today keeps its border, and every day its full date for
+     screen readers) */
   @container (width < 2.25rem) {
     :where(.yotei-day-list[data-layout="grid"] .yotei-day-label) {
       display: none;
     }
-  }
-  /* two lines per day: the label already says the weekday (or today, the month) */
-  :where(.yotei-day-list[data-layout="grid"] .yotei-day-weekday) {
-    display: none;
+    :where(.yotei-day-list[data-layout="grid"] .yotei-day-number) {
+      font-size: 1rem;
+    }
   }
   :where(.yotei-day-list[data-layout="grid"] .yotei-day-label) {
+    font-size: 0.5rem;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -494,8 +520,8 @@
     border-left: 1px solid var(--yotei-border);
   }
   :where(.yotei-column-label) {
-    padding: 0.5rem 0.75rem 0.25rem;
-    font-size: 10px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.7rem;
     line-height: 1rem;
   }
   :where(.yotei-list) {
@@ -515,12 +541,14 @@
     align-items: center;
     justify-content: space-between;
     padding: 0.375rem 0.75rem;
-    border-radius: calc(var(--yotei-radius) - 2px);
+    border-radius: calc(var(--yotei-radius) - 0.125rem);
     font-size: 0.875rem;
     line-height: 1.25rem;
     font-weight: 500;
     transition-property: color, background-color;
     transition-duration: 100ms;
+    -webkit-user-select: none;
+    user-select: none;
   }
   :where(.yotei-option:hover) {
     background: var(--yotei-accent);
@@ -528,7 +556,7 @@
   }
   :where(.yotei-option-period) {
     margin-left: 0.25rem;
-    font-size: 10px;
+    font-size: 0.625rem;
     font-weight: 600;
     color: var(--yotei-muted-foreground);
   }
@@ -542,21 +570,36 @@
     box-shadow: var(--yotei-shadow-sm);
   }
   :where(.yotei-option[data-selected] .yotei-option-period) {
-    color: color-mix(in oklab, var(--yotei-primary-foreground) 70%, transparent);
+    color: color-mix(
+      in oklab,
+      var(--yotei-primary-foreground) 70%,
+      transparent
+    );
   }
   :where(.yotei-option[data-disabled]) {
     background: none;
     color: color-mix(in oklab, var(--yotei-muted-foreground) 25%, transparent);
-    text-decoration: line-through;
   }
   :where(.yotei-option[data-disabled] .yotei-option-period) {
     color: color-mix(in oklab, var(--yotei-muted-foreground) 20%, transparent);
+  }
+  /* one strike over the number and its AM/PM: a line-through skips the margin
+     between them, and Chrome draws it at each font size's own height */
+  :where(.yotei-option[data-disabled] .yotei-option-label) {
+    position: relative;
+  }
+  :where(.yotei-option[data-disabled] .yotei-option-label)::after {
+    content: "";
+    position: absolute;
+    inset: 50% 0 auto;
+    height: 1px;
+    background: currentColor;
   }
   :where(.yotei-empty) {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 140px;
+    height: 8.75rem;
     padding: 0 0.5rem;
     text-align: center;
     font-size: 0.75rem;
@@ -577,7 +620,7 @@
     gap: 0.75rem;
     width: 100%;
     padding: 0.5rem 0.75rem;
-    border-radius: calc(var(--yotei-radius) - 2px);
+    border-radius: calc(var(--yotei-radius) - 0.125rem);
     font-size: 0.875rem;
     line-height: 1.25rem;
     transition-property: color, background-color;
@@ -634,7 +677,7 @@
     gap: 0.25rem;
     height: 1.75rem;
     padding: 0 0.5rem;
-    border-radius: calc(var(--yotei-radius) - 2px);
+    border-radius: calc(var(--yotei-radius) - 0.125rem);
     font-size: 0.75rem;
     font-weight: 500;
     color: var(--yotei-muted-foreground);
@@ -649,20 +692,22 @@
   /* ── Focus + motion ────────────────────────────────────────────── */
 
   :where(
-      .yotei-trigger:focus-visible,
-      .yotei-clear:focus-visible,
-      .yotei-nav-button:focus-visible,
-      .yotei-back:focus-visible,
-      .yotei-day:focus-visible,
-      .yotei-option:focus-visible,
-      .yotei-preset:focus-visible
-    ) {
+    .yotei-trigger:focus-visible,
+    .yotei-clear:focus-visible,
+    .yotei-nav-button:focus-visible,
+    .yotei-back:focus-visible,
+    .yotei-day:focus-visible,
+    .yotei-option:focus-visible,
+    .yotei-preset:focus-visible
+  ) {
     outline: none;
-    box-shadow: 0 0 0 2px color-mix(in oklab, var(--yotei-ring) 60%, transparent);
+    box-shadow: 0 0 0 2px
+      color-mix(in oklab, var(--yotei-ring) 60%, transparent);
   }
   :where(.yotei-trigger:focus-visible, .yotei-clear:focus-visible) {
     border-color: var(--yotei-ring);
-    box-shadow: 0 0 0 3px color-mix(in oklab, var(--yotei-ring) 50%, transparent);
+    box-shadow: 0 0 0 3px
+      color-mix(in oklab, var(--yotei-ring) 50%, transparent);
   }
 
   @media (prefers-reduced-motion: reduce) {

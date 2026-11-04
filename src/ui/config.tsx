@@ -100,7 +100,6 @@ export type SchedulePickerPart =
   | "dayLabel"
   | "dayNumber"
   | "dayWeekday"
-  | "todayDot"
   | "time"
   | "column"
   | "columnLabel"

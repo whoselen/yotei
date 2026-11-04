@@ -9,7 +9,7 @@ export interface ScheduleTimePickerValue {
 
 /** What `value`, `defaultValue` and `onChange` use for each `valueType` */
 export interface ScheduleValues {
-  /** `{ date, hour, minute }` in local time -- the original component's shape */
+  /** `{ date, hour, minute }` in local time */
   parts: ScheduleTimePickerValue;
   /** The exact moment */
   date: Date;
