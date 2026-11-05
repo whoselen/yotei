@@ -1,3 +1,5 @@
+
+
 # react-schedule-time-picker
 
 **A date & time picker for React that only picks the future.** A day strip,
@@ -11,7 +13,9 @@ bookings, deliveries, meetings.
 
 **[Live demo](https://yotei-kappa.vercel.app)**: try every layout and option in
 the browser.
-
+<a href="https://youtu.be/iHOscbdz9_Q" target="_blank">
+   <img src="https://youtube.com" alt="Watch the showcase" width="100%" max-width="600px" />
+</a>
 Source on GitHub: [whoselen/yotei](https://github.com/whoselen/yotei). If this
 saves you time, a ⭐ on GitHub helps.
 
