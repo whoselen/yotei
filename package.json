@@ -67,5 +67,8 @@
   "homepage": "https://yotei-kappa.vercel.app",
   "bugs": {
     "url": "https://github.com/whoselen/yotei/issues"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
   }
 }

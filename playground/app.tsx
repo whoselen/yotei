@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import {
   AlarmClock,
   ArrowLeft,
@@ -819,6 +820,7 @@ export function App() {
 
         <SiteFooter />
       </div>
+      <Analytics />
     </SchedulePickerProvider>
   );
 }
